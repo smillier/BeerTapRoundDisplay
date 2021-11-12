@@ -18,7 +18,10 @@
  * Teensy 4.1 dev board        : TFT_CS: 39, TFT_DC: 41, TFT_RST: 40, TFT_BL: 22
  ******************************************************************************/
 #include <Arduino_GFX_Library.h>
-
+#include "FS.h"
+#include <SPIFFS.h>
+#include <time.h> 
+#include <WiFi.h>
 
 /* More dev device declaration: https://github.com/moononournation/Arduino_GFX/wiki/Dev-Device-Declaration */
 #if defined(DISPLAY_DEV_KIT)
@@ -76,6 +79,16 @@ static int16_t *cached_points;
 static uint16_t cached_points_idx = 0;
 static int16_t *last_cached_point;
 
+#include "../include/BmpClass.h"
+static BmpClass bmpClass;
+
+
+// pixel drawing callback
+static void bmpDrawCallback(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, int16_t h)
+{
+  // Serial.printf("Draw pos = %d, %d. size = %d x %d\n", x, y, w, h);
+  gfx->draw16bitRGBBitmap(x, y, bitmap, w, h);
+}
 
 
 void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3)
@@ -84,8 +97,13 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
   int16_t x0, x1, y0, y1, innerR, outerR;
   uint16_t c;
   float mdeg2;
+  File bmpFile = SPIFFS.open("/NSRM7.bmp", "r");
+  // read JPEG file header
+    bmpClass.draw(
+        &bmpFile, bmpDrawCallback, false /* useBigEndian */,
+        0 /* x */, -50 /* y */, gfx->width() /* widthLimit */, gfx->height() /* heightLimit */);
 
-  
+    bmpFile.close();
 
   for (uint8_t i = 0; i < 60; i++)
   {
@@ -117,15 +135,16 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
       gfx->drawLine(x0, y0, x1, y1, c);
     }
   }
-    gfx->setCursor(40, 100);
+    
+    gfx->setCursor(40, 120);
     gfx->setTextSize(3 /* x scale */, 3 /* y scale */, 3);
     gfx->setTextColor(WHITE);
     gfx->println("White IPA");
-    gfx->setCursor(40, 130);
+    gfx->setCursor(40, 150);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
     gfx->println("IBU: 57");
-    gfx->setCursor(40, 150);
+    gfx->setCursor(40, 170);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
     gfx->println("ABV: 4.5%");
@@ -253,7 +272,11 @@ void setup(void)
     digitalWrite(21,HIGH);
     gfx->begin();
     gfx->fillScreen(BACKGROUND);
-
+    Serial.begin(9600);
+  if(!SPIFFS.begin()){
+        Serial.println("SPIFFS Mount Failed");
+        return;
+    }
 #ifdef TFT_BL
     pinMode(TFT_BL, OUTPUT);
     digitalWrite(TFT_BL, HIGH);
