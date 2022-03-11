@@ -17,11 +17,15 @@
  * Seeeduino XIAO dev board    : TFT_CS:  3, TFT_DC:  2, TFT_RST:  1, TFT_BL:  0
  * Teensy 4.1 dev board        : TFT_CS: 39, TFT_DC: 41, TFT_RST: 40, TFT_BL: 22
  ******************************************************************************/
+
 #include <Arduino_GFX_Library.h>
+
+#include "config.h"
+#include "setup.h"
 #include "FS.h"
 #include <SPIFFS.h>
-#include <time.h> 
-#include <WiFi.h>
+
+
 
 /* More dev device declaration: https://github.com/moononournation/Arduino_GFX/wiki/Dev-Device-Declaration */
 #if defined(DISPLAY_DEV_KIT)
@@ -44,28 +48,6 @@ Arduino_GFX *gfx = new Arduino_GC9A01(bus, 16 /* RST */, 0 /* rotation */, true 
  * End of Arduino_GFX setting
  ******************************************************************************/
 
-#define BACKGROUND BLACK
-#define MARK_COLOR WHITE
-#define SUBMARK_COLOR DARKGREY // LIGHTGREY
-#define HOUR_COLOR WHITE
-#define MINUTE_COLOR BLUE // LIGHTGREY
-#define SECOND_COLOR RED
-#define HOP_COLOR GREEN
-
-#define SIXTIETH 0.016666667
-#define TWELFTH 0.08333333
-#define SIXTIETH_RADIAN 0.10471976
-#define TWELFTH_RADIAN 0.52359878
-#define RIGHT_ANGLE_RADIAN 1.5707963
-#define RIGHT_STOP 5.4977 //7PI/4
-#define LEFT_STOP 3.9 //5PI/4
-
-static uint8_t conv2d(const char *p)
-{
-    uint8_t v = 0;
-    return (10 * (*p - '0')) + (*++p - '0');
-}
-
 static int16_t w, h, center;
 static int16_t hHandLen, mHandLen, sHandLen, markLen;
 static float sdeg, mdeg, hdeg;
@@ -81,6 +63,8 @@ static int16_t *last_cached_point;
 
 #include "../include/BmpClass.h"
 static BmpClass bmpClass;
+
+
 
 
 // pixel drawing callback
@@ -268,11 +252,11 @@ void redraw_hands_cached_draw_and_erase()
 
 void setup(void)
 {
-  pinMode(21, OUTPUT);
-    digitalWrite(21,HIGH);
+    
     gfx->begin();
     gfx->fillScreen(BACKGROUND);
     Serial.begin(9600);
+   
   if(!SPIFFS.begin()){
         Serial.println("SPIFFS Mount Failed");
         return;
@@ -305,64 +289,12 @@ void setup(void)
         center - markLen, center,
         center - (markLen * 2 / 3), center,
         center - (markLen / 2), center);
-
-    hh = conv2d(__TIME__);
-    mm = conv2d(__TIME__ + 3);
-    ss = conv2d(__TIME__ + 6);
-
-    targetTime = ((millis() / 1000) + 1) * 1000;
+ initialize();
 }
 
 void loop()
 {
-    unsigned long cur_millis = millis();
-    if (cur_millis >= targetTime)
-    {
-        targetTime += 1000;
-        ss++; // Advance second
-        if (ss == 60)
-        {
-            ss = 0;
-            mm++; // Advance minute
-            if (mm > 59)
-            {
-                mm = 0;
-                hh++; // Advance hour
-                if (hh > 23)
-                {
-                    hh = 0;
-                }
-            }
-        }
-    }
-
-    // Pre-compute hand degrees, x & y coords for a fast screen update
-    sdeg = SIXTIETH_RADIAN * ((0.001 * (cur_millis % 1000)) + ss); // 0-59 (includes millis)
-    nsx = cos(sdeg - RIGHT_ANGLE_RADIAN) * sHandLen + center;
-    nsy = sin(sdeg - RIGHT_ANGLE_RADIAN) * sHandLen + center;
-    if ((nsx != osx) || (nsy != osy))
-    {
-        mdeg = (SIXTIETH * sdeg) + (SIXTIETH_RADIAN * mm); // 0-59 (includes seconds)
-        hdeg = (TWELFTH * mdeg) + (TWELFTH_RADIAN * hh);   // 0-11 (includes minutes)
-        mdeg -= RIGHT_ANGLE_RADIAN;
-        hdeg -= RIGHT_ANGLE_RADIAN;
-        nmx = cos(mdeg) * mHandLen + center;
-        nmy = sin(mdeg) * mHandLen + center;
-        nhx = cos(hdeg) * hHandLen + center;
-        nhy = sin(hdeg) * hHandLen + center;
-
-        // redraw hands
-        //redraw_hands_cached_draw_and_erase();
-
-        ohx = nhx;
-        ohy = nhy;
-        omx = nmx;
-        omy = nmy;
-        osx = nsx;
-        osy = nsy;
-
-        delay(1);
-    }
+    //ArduinoOTA.handle();    
 }
 
 
