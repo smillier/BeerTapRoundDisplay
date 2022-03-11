@@ -22,6 +22,7 @@
 
 #include "config.h"
 #include "setup.h"
+#include "weightmeasure.h"
 #include "FS.h"
 #include <SPIFFS.h>
 
