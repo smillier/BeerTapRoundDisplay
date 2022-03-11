@@ -17,3 +17,6 @@
 #define LEFT_STOP 3.9 //5PI/4
 
 #define TFT_BL 21
+//pins:
+#define HX711_dout 13 //mcu > HX711 dout pin
+#define HX711_sck 15 //mcu > HX711 sck pin

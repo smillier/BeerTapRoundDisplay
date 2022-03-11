@@ -24,6 +24,7 @@
 #include "setup.h"
 #include "weightmeasure.h"
 #include "FS.h"
+#include <string>
 #include <SPIFFS.h>
 
 
@@ -82,7 +83,7 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
   int16_t x0, x1, y0, y1, innerR, outerR;
   uint16_t c;
   float mdeg2;
-  File bmpFile = SPIFFS.open("/NSRM7.bmp", "r");
+  File bmpFile = SPIFFS.open("/NSRM12.bmp", "r");
   // read JPEG file header
     bmpClass.draw(
         &bmpFile, bmpDrawCallback, false /* useBigEndian */,
@@ -121,10 +122,10 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
     }
   }
     
-    gfx->setCursor(40, 120);
-    gfx->setTextSize(3 /* x scale */, 3 /* y scale */, 3);
+    gfx->setCursor(10, 120);
+    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
-    gfx->println("White IPA");
+    gfx->println("Red Irish IPA");
     gfx->setCursor(40, 150);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
@@ -132,7 +133,12 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
     gfx->setCursor(40, 170);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
-    gfx->println("ABV: 4.5%");
+    gfx->println("ABV: 6.5%");
+    float kegWeight  = getWeight();
+    gfx->setCursor(40, 190);
+    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    gfx->setTextColor(WHITE);
+    gfx->println("Keg: " + String(kegWeight/1000) + "Kg");
     
 }
 
@@ -290,7 +296,8 @@ void setup(void)
         center - markLen, center,
         center - (markLen * 2 / 3), center,
         center - (markLen / 2), center);
- initialize();
+    initialize();
+    
 }
 
 void loop()
