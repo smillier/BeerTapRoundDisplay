@@ -1,4 +1,5 @@
-
+#define VERSION 0.1
+#define DEBUG_MODE //Display debug messages in serial. Comment out to disable debug messages
 
 #define BACKGROUND BLACK
 #define MARK_COLOR WHITE
@@ -16,7 +17,15 @@
 #define RIGHT_STOP 5.4977 //7PI/4
 #define LEFT_STOP 3.9 //5PI/4
 
+//GC9A01 TFT pins:
 #define TFT_BL 21
-//pins:
+#define TFT_DC 27
+#define TFT_CS 5
+#define TFT_SCK 18
+#define TFT_MOSI 23
+#define TFT_MISO -1
+#define TFT_RST 16
+
+//HX711 pins:
 #define HX711_dout 13 //mcu > HX711 dout pin
 #define HX711_sck 15 //mcu > HX711 sck pin

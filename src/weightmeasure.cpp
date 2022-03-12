@@ -23,6 +23,9 @@ float getWeight()
       newDataReady = 0;
       t = millis();
       value = "Poids: " + String(i) + "G";
+      #ifdef DEBUG_MODE
+      Serial.println(value);
+      #endif
     }
   }
     return i;
