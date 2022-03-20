@@ -1,4 +1,3 @@
 #include <config.h>
 
-void config()
-{}
+void config();

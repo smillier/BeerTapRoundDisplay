@@ -12,7 +12,7 @@
 #include <ESPmDNS.h>
 #include <ArduinoOTA.h>
 #include <ESPAsync_WiFiManager.h> 
-
+#include "display.h"
 AsyncWebServer server(80);
 
 
@@ -93,4 +93,9 @@ DNSServer dnsServer;
     AsyncElegantOTA.begin(&server);    // Start ElegantOTA
   server.begin();
   Serial.println("Serveur actif!");
+
+  display_init();
+
 }
+
+
