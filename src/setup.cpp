@@ -12,6 +12,7 @@
 #include <ESPmDNS.h>
 #include <ArduinoOTA.h>
 #include <ESPAsync_WiFiManager.h> 
+#include "weightmeasure.h"
 #include "display.h"
 AsyncWebServer server(80);
 
@@ -93,7 +94,9 @@ DNSServer dnsServer;
     AsyncElegantOTA.begin(&server);    // Start ElegantOTA
   server.begin();
   Serial.println("Serveur actif!");
-
+  
+  scale_setup();
+  //scale_calibrate();
   display_init();
 
 }

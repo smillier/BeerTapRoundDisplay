@@ -7,6 +7,7 @@
 #include "setup.h"
 #include "weightmeasure.h"
 #include "FS.h"
+#include "display.h"
 #include <string>
 #include <SPIFFS.h>
 
@@ -18,6 +19,8 @@ void setup(void)
 
 void loop()
 {
+    display_init();
+     delayMicroseconds(5000000);
     //ArduinoOTA.handle();    
 }
 

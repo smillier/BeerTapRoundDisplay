@@ -27,5 +27,5 @@
 #define TFT_RST 16
 
 //HX711 pins:
-#define HX711_dout 13 //mcu > HX711 dout pin
-#define HX711_sck 15 //mcu > HX711 sck pin
+#define HX711_dout 25 //mcu > HX711 dout pin
+#define HX711_sck 4 //mcu > HX711 sck pin
