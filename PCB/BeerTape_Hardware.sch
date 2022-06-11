@@ -76,56 +76,55 @@
 <library name="ESP32">
 <packages>
 <package name="ESP32">
-<pad name="5V" x="1.27" y="1.27" drill="0.85" shape="square"/>
-<pad name="GPIO11" x="1.27" y="3.81" drill="0.85" shape="square"/>
-<pad name="GPIO10" x="1.27" y="6.35" drill="0.85" shape="square"/>
-<pad name="GPIO9" x="1.27" y="8.89" drill="0.85" shape="square"/>
-<pad name="GPIO13" x="1.27" y="11.43" drill="0.85" shape="square"/>
-<pad name="GND1" x="1.27" y="13.97" drill="0.85" shape="square"/>
-<pad name="GPIO12" x="1.27" y="16.51" drill="0.85" shape="square"/>
-<pad name="GPIO14" x="1.27" y="19.05" drill="0.85" shape="square"/>
-<pad name="GPIO27" x="1.27" y="21.59" drill="0.85" shape="square"/>
-<pad name="GPIO26" x="1.27" y="24.13" drill="0.85" shape="square"/>
-<pad name="GPIO25" x="1.27" y="26.67" drill="0.85" shape="square"/>
-<pad name="GPIO33" x="1.27" y="29.21" drill="0.85" shape="square"/>
-<pad name="GPIO32" x="1.27" y="31.75" drill="0.85" shape="square"/>
-<pad name="GPIO35" x="1.27" y="34.29" drill="0.85" shape="square"/>
-<pad name="GPIO34" x="1.27" y="36.83" drill="0.85" shape="square"/>
-<pad name="GPIO39" x="1.27" y="39.37" drill="0.85" shape="square"/>
-<pad name="GPIO36" x="1.27" y="41.91" drill="0.85" shape="square"/>
-<pad name="EN" x="1.27" y="44.45" drill="0.85" shape="square"/>
-<pad name="3.3V" x="1.27" y="46.99" drill="0.85" shape="square"/>
-<pad name="GPIO6" x="24.13" y="1.27" drill="0.85" shape="square"/>
-<pad name="GPIO7" x="24.13" y="3.81" drill="0.85" shape="square"/>
-<pad name="GPIO8" x="24.13" y="6.35" drill="0.85" shape="square"/>
-<pad name="GPIO15" x="24.13" y="8.89" drill="0.85" shape="square"/>
-<pad name="GPIO2" x="24.13" y="11.43" drill="0.85" shape="square"/>
-<pad name="GPIO0" x="24.13" y="13.97" drill="0.85" shape="square"/>
-<pad name="GPIO4" x="24.13" y="16.51" drill="0.85" shape="square"/>
-<pad name="GPIO16" x="24.13" y="19.05" drill="0.85" shape="square"/>
-<pad name="GPIO17" x="24.13" y="21.59" drill="0.85" shape="square"/>
-<pad name="GPIO5" x="24.13" y="24.13" drill="0.85" shape="square"/>
-<pad name="GPIO18" x="24.13" y="26.67" drill="0.6" shape="square"/>
-<pad name="GPIO19" x="24.13" y="29.21" drill="0.85" shape="square"/>
-<pad name="GND3" x="24.13" y="31.75" drill="0.85" shape="square"/>
-<pad name="GPIO21" x="24.13" y="34.29" drill="0.85" shape="square"/>
-<pad name="RX" x="24.13" y="36.83" drill="0.85" shape="square"/>
-<pad name="TX" x="24.13" y="39.37" drill="0.85" shape="square"/>
-<pad name="GPIO22" x="24.13" y="41.91" drill="0.85" shape="square"/>
-<pad name="GPIO23" x="24.13" y="44.45" drill="0.85" shape="square"/>
-<pad name="GND2" x="24.13" y="46.99" drill="0.85" shape="square"/>
+<pad name="5V" x="1.27" y="1.27" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO11" x="1.27" y="3.81" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO10" x="1.27" y="6.35" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO9" x="1.27" y="8.89" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO13" x="1.27" y="11.43" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GND1" x="1.27" y="13.97" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO12" x="1.27" y="16.51" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO14" x="1.27" y="19.05" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO27" x="1.27" y="21.59" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO26" x="1.27" y="24.13" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO25" x="1.27" y="26.67" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO33" x="1.27" y="29.21" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO32" x="1.27" y="31.75" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO35" x="1.27" y="34.29" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO34" x="1.27" y="36.83" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO39" x="1.27" y="39.37" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO36" x="1.27" y="41.91" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="EN" x="1.27" y="44.45" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="3.3V" x="1.27" y="46.99" drill="0.9" diameter="1.6764" shape="long"/>
+<pad name="GPIO6" x="27.94" y="1.27" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO7" x="27.94" y="3.81" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO8" x="27.94" y="6.35" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO15" x="27.94" y="8.89" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO2" x="27.94" y="11.43" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO0" x="27.94" y="13.97" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO4" x="27.94" y="16.51" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO16" x="27.94" y="19.05" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO17" x="27.94" y="21.59" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO5" x="27.94" y="24.13" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO18" x="27.94" y="26.67" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO19" x="27.94" y="29.21" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GND3" x="27.94" y="31.75" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO21" x="27.94" y="34.29" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="RX" x="27.94" y="36.83" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="TX" x="27.94" y="39.37" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO22" x="27.94" y="41.91" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GPIO23" x="27.94" y="44.45" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GND2" x="27.94" y="46.99" drill="0.9" diameter="1.4224" shape="long"/>
 <wire x1="0" y1="0" x2="0" y2="48.26" width="0.127" layer="21"/>
-<wire x1="0" y1="48.26" x2="25.4" y2="48.26" width="0.127" layer="21"/>
-<wire x1="25.4" y1="48.26" x2="25.4" y2="0" width="0.127" layer="21"/>
-<wire x1="25.4" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
+<wire x1="0" y1="48.26" x2="29.21" y2="48.26" width="0.127" layer="21"/>
+<wire x1="29.21" y1="48.26" x2="29.21" y2="0" width="0.127" layer="21"/>
+<wire x1="29.21" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
 <polygon width="0.127" layer="21">
 <vertex x="8.89" y="0"/>
 <vertex x="8.89" y="2.54"/>
-<vertex x="12.7" y="2.54"/>
-<vertex x="16.51" y="2.54"/>
-<vertex x="16.51" y="0"/>
+<vertex x="17.78" y="2.54"/>
+<vertex x="17.78" y="0"/>
 </polygon>
-<text x="12.7" y="2.794" size="1.27" layer="21" align="bottom-center">USB</text>
+<text x="13.97" y="4.064" size="1.27" layer="21" align="bottom-center">USB</text>
 </package>
 </packages>
 <symbols>
@@ -306,14 +305,14 @@
 <library name="GC9A01">
 <packages>
 <package name="GC9A01">
-<pad name="GND" x="0" y="0" drill="0.6" shape="square"/>
-<pad name="VCC" x="2.54" y="0" drill="0.6"/>
-<pad name="SCL" x="5.08" y="0" drill="0.6"/>
-<pad name="SDA" x="7.62" y="0" drill="0.6"/>
-<pad name="RES" x="10.16" y="0" drill="0.6"/>
-<pad name="DC" x="12.7" y="0" drill="0.6"/>
-<pad name="CS" x="15.24" y="0" drill="0.6"/>
-<pad name="BLK" x="17.78" y="0" drill="0.6"/>
+<pad name="GND" x="0" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="VCC" x="2.54" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="SCL" x="5.08" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="SDA" x="7.62" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="RES" x="10.16" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="DC" x="12.7" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="CS" x="15.24" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
+<pad name="BLK" x="17.78" y="0" drill="0.9" diameter="1.4224" shape="long" rot="R90"/>
 <wire x1="-3.81" y1="-1.27" x2="-1.27" y2="1.27" width="0.127" layer="21"/>
 <wire x1="-1.27" y1="1.27" x2="19.05" y2="1.27" width="0.127" layer="21"/>
 <wire x1="19.05" y1="1.27" x2="21.59" y2="-1.27" width="0.127" layer="21"/>
@@ -10293,16 +10292,16 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <library name="HX711">
 <packages>
 <package name="HX711">
-<pad name="E+" x="8.89" y="29.21" drill="0.9" shape="square"/>
-<pad name="E-" x="8.89" y="26.67" drill="0.9" shape="square"/>
-<pad name="A-" x="8.89" y="24.13" drill="0.9" shape="square"/>
-<pad name="A+" x="8.89" y="21.59" drill="0.9" shape="square"/>
-<pad name="B-" x="8.89" y="19.05" drill="0.9" shape="square"/>
-<pad name="B+" x="8.89" y="16.51" drill="0.9" shape="square"/>
-<pad name="VCC" x="34.29" y="19.05" drill="0.9" shape="square"/>
-<pad name="SCK" x="34.29" y="21.59" drill="0.9" shape="square"/>
-<pad name="DT" x="34.29" y="24.13" drill="0.9" shape="square"/>
-<pad name="GND" x="34.29" y="26.67" drill="0.9" shape="square"/>
+<pad name="E+" x="8.89" y="29.21" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="E-" x="8.89" y="26.67" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="A-" x="8.89" y="24.13" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="A+" x="8.89" y="21.59" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="B-" x="8.89" y="19.05" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="B+" x="8.89" y="16.51" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="VCC" x="34.29" y="19.05" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="SCK" x="34.29" y="21.59" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="DT" x="34.29" y="24.13" drill="0.9" diameter="1.4224" shape="long"/>
+<pad name="GND" x="34.29" y="26.67" drill="0.9" diameter="1.4224" shape="long"/>
 <wire x1="3.81" y1="12.7" x2="3.81" y2="34.29" width="0.127" layer="21"/>
 <wire x1="3.81" y1="34.29" x2="39.37" y2="34.29" width="0.127" layer="21"/>
 <wire x1="39.37" y1="34.29" x2="39.37" y2="12.7" width="0.127" layer="21"/>
@@ -10369,10 +10368,10 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="default" width="0.3048" drill="0">
-<clearance class="0" value="0.3048"/>
+<class number="0" name="default" width="0.508" drill="0">
+<clearance class="0" value="0.381"/>
 </class>
-<class number="1" name="PWR" width="0.508" drill="0">
+<class number="1" name="PWR" width="0.635" drill="0">
 <clearance class="1" value="0.381"/>
 </class>
 </classes>
@@ -10387,7 +10386,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="X1" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="KK-156-2" device="" package3d_urn="urn:adsk.eagle:package:8078800/1"/>
 <part name="VDD2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E5-10.5" package3d_urn="urn:adsk.eagle:package:23372/2"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E2,5-6E" package3d_urn="urn:adsk.eagle:package:23430/1"/>
 <part name="HX711" library="HX711" deviceset="HX711" device="A" value="HX711"/>
 <part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="X2" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2061" device="" package3d_urn="urn:adsk.eagle:package:8078637/1"/>
@@ -10489,7 +10488,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="-5.08" y1="55.88" x2="10.16" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="VCC" class="0">
+<net name="VCC" class="1">
 <segment>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
 <pinref part="U$2" gate="G$1" pin="3.3V"/>
@@ -10523,13 +10522,13 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </net>
 <net name="N$1" class="0">
 <segment>
-<pinref part="U$2" gate="G$1" pin="GPIO27"/>
-<wire x1="35.56" y1="58.42" x2="22.86" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="58.42" x2="22.86" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="99.06" x2="116.84" y2="99.06" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="DC"/>
-<wire x1="116.84" y1="99.06" x2="116.84" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="71.12" x2="111.76" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="71.12" x2="116.84" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="27.94" x2="76.2" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="27.94" x2="76.2" y2="53.34" width="0.1524" layer="91"/>
+<pinref part="U$2" gate="G$1" pin="GPIO4"/>
+<wire x1="76.2" y1="53.34" x2="66.04" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -10579,26 +10578,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="91.44" y1="76.2" x2="111.76" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$13" class="0">
-<segment>
-<pinref part="HX711" gate="G$1" pin="DT"/>
-<wire x1="-2.54" y1="35.56" x2="-2.54" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="-2.54" y1="50.8" x2="33.02" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="U$2" gate="G$1" pin="GPIO12"/>
-<wire x1="33.02" y1="50.8" x2="33.02" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="53.34" x2="35.56" y2="53.34" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$14" class="0">
-<segment>
-<pinref part="U$2" gate="G$1" pin="GPIO14"/>
-<wire x1="35.56" y1="55.88" x2="17.78" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="55.88" x2="17.78" y2="40.64" width="0.1524" layer="91"/>
-<pinref part="HX711" gate="G$1" pin="SCK"/>
-<wire x1="17.78" y1="40.64" x2="0" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="0" y1="40.64" x2="0" y2="35.56" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$15" class="0">
 <segment>
 <pinref part="HX711" gate="G$1" pin="E+"/>
@@ -10639,6 +10618,28 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="HX711" gate="G$1" pin="B+"/>
 <pinref part="X2" gate="-1" pin="S"/>
 <wire x1="7.62" y1="-2.54" x2="7.62" y2="-10.16" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<wire x1="22.86" y1="40.64" x2="20.32" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="HX711" gate="G$1" pin="SCK"/>
+<wire x1="20.32" y1="40.64" x2="0" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="0" y1="40.64" x2="0" y2="35.56" width="0.1524" layer="91"/>
+<pinref part="U$2" gate="G$1" pin="GPIO12"/>
+<wire x1="35.56" y1="53.34" x2="27.94" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="53.34" x2="27.94" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="40.64" x2="22.86" y2="40.64" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$8" class="0">
+<segment>
+<pinref part="U$2" gate="G$1" pin="GPIO25"/>
+<wire x1="35.56" y1="63.5" x2="25.4" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="63.5" x2="25.4" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="HX711" gate="G$1" pin="DT"/>
+<wire x1="25.4" y1="45.72" x2="-2.54" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="45.72" x2="-2.54" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
