@@ -10,7 +10,7 @@
 #include "display.h"
 #include <string>
 #include <SPIFFS.h>
-
+#include <ArduinoOTA.h>
 
 void setup(void)
 {
@@ -20,8 +20,9 @@ void setup(void)
 void loop()
 {
     display_init();
+    //redraw_hands_cached_draw_and_erase();
      delayMicroseconds(5000000);
-    //ArduinoOTA.handle();    
+    ArduinoOTA.handle();    
 }
 
 

@@ -9,13 +9,12 @@ void scale_setup()
 {
   scale.begin(HX711_dout, HX711_sck);
   scale.tare();
+  scale.set_scale(SCALE_CALIBRATION_FACTOR);
 }
 
 void scale_calibrate()
 {
-   while(!Serial.available());
-  while(Serial.available()) Serial.read();
-  scale.calibrate_scale(750, 5);
+  
 }
 
 float getWeight()

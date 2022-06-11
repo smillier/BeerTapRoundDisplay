@@ -19,7 +19,7 @@
 
 //GC9A01 TFT pins:
 #define TFT_BL 21
-#define TFT_DC 27
+#define TFT_DC 4
 #define TFT_CS 5
 #define TFT_SCK 18
 #define TFT_MOSI 23
@@ -28,4 +28,5 @@
 
 //HX711 pins:
 #define HX711_dout 25 //mcu > HX711 dout pin
-#define HX711_sck 4 //mcu > HX711 sck pin
+#define HX711_sck 12 //mcu > HX711 sck pin
+#define SCALE_CALIBRATION_FACTOR 20710 //needs to be adapted to each scale

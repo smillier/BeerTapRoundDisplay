@@ -97,8 +97,17 @@ DNSServer dnsServer;
   
   scale_setup();
   //scale_calibrate();
+  if(!SPIFFS.begin()){
+        Serial.println("SPIFFS Mount Failed");
+        return;
+    }
   display_init();
 
 }
 
+
+void initWebServer()
+{
+  
+}
 
