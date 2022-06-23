@@ -47,15 +47,20 @@ static BmpClass bmpClass;
 void display_init()
 {
      gfx->begin();
+      Serial.println("Display begin");
     gfx->fillScreen(BACKGROUND);
-    Serial.begin(9600);
+    
     
   
 #ifdef TFT_BL
     pinMode(TFT_BL, OUTPUT);
     digitalWrite(TFT_BL, HIGH);
 #endif
+}
 
+void refresh_display()
+{
+    gfx->fillScreen(BACKGROUND);
     // init LCD constant
     w = gfx->width();
     h = gfx->height();
@@ -128,10 +133,10 @@ static void bmpDrawCallback(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, i
 
 void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3)
 {
-  
+   Serial.println("Load file");
   File bmpFile = SPIFFS.open("/NSRM12.bmp", "r");
   // read JPEG file header
-    
+     Serial.println("File loaded");
     
     gfx->setCursor(50, 120);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
@@ -149,7 +154,9 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
     //Get Keg weight
+     Serial.println("Get weight");
     float kegWeight  = getWeight();
+     Serial.println("Weight:");
     int valueToPrint = (100/0.33) * kegWeight;
     gfx->println("Keg: " + String(kegWeight) + "Kg ");
     // Set the the position, gap between meters, and inner radius of the meters
@@ -160,13 +167,13 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
     
     
     xpos = gap + ringMeter(valueToPrint, 0, 100, xpos, ypos, radius, "mA", RED2GREEN); // Draw analogue meter
-
+    Serial.println("DrawBMP");
     bmpClass.draw(
         &bmpFile, bmpDrawCallback, false /* useBigEndian */,
         0 /* x */, -50 /* y */, gfx->width() /* widthLimit */, gfx->height() /* heightLimit */);
 
     bmpFile.close();
-    
+    Serial.println("End of display init");
 }
 
 // #########################################################################

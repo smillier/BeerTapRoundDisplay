@@ -26,7 +26,7 @@ DNSServer dnsServer;
 //const char *ssid = "";
 //const char *password = "";
 
-
+  Serial.begin(115200);
   Serial.println("\n");
   Serial.println("Connexion etablie!");
   Serial.print("Adresse IP: ");
@@ -95,14 +95,16 @@ DNSServer dnsServer;
   server.begin();
   Serial.println("Serveur actif!");
   
-  scale_setup();
-  //scale_calibrate();
   if(!SPIFFS.begin()){
         Serial.println("SPIFFS Mount Failed");
         return;
     }
+     Serial.println("Init display");
   display_init();
-
+   Serial.println("Scale setup");
+ scale_setup();
+  //scale_calibrate();
+ 
 }
 
 

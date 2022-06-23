@@ -14,14 +14,15 @@
 
 void setup(void)
 {
+    //Serial.begin(115200);
     initialize();
 }
 
 void loop()
 {
-    display_init();
+    refresh_display();
     //redraw_hands_cached_draw_and_erase();
-     delayMicroseconds(5000000);
+   delayMicroseconds(5000000);
     ArduinoOTA.handle();    
 }
 

@@ -2,6 +2,7 @@
 #define __DISPLAY_H__
 #include <cstdint>
 extern void display_init();
+extern void refresh_display();
 //extern void bmpDrawCallback(int16_t );
 extern void  draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3);
 extern void write_cache_pixel(int16_t x, int16_t y, int16_t color, bool cross_check_second, bool cross_check_hour);
