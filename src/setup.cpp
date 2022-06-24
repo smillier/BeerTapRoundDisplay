@@ -15,6 +15,7 @@
 #include "weightmeasure.h"
 #include "display.h"
 AsyncWebServer server(80);
+#include "config.h"
 
 
 void initialize()
@@ -100,6 +101,7 @@ DNSServer dnsServer;
         return;
     }
      Serial.println("Init display");
+
   display_init();
    Serial.println("Scale setup");
  scale_setup();
@@ -110,6 +112,118 @@ DNSServer dnsServer;
 
 void initWebServer()
 {
-  
+   //----------------------------------------------------SERVER
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/index.html", "text/html"); });
+
+  server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/w3.css", "text/css"); });
+
+  server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/script.js", "text/javascript"); });
+
+  server.on("/jquery-3.4.1.min.js", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/jquery-3.4.1.min.js", "text/javascript"); });
+
+  server.on("/param.xml", HTTP_GET, [](AsyncWebServerRequest *request)
+            { 
+              request->send(SPIFFS, "/param.xml", "text/xml");});
+
+  server.on("/wparamxml", HTTP_POST, [](AsyncWebServerRequest *request)
+            { 
+                Serial.println("wparam");
+                File file = SPIFFS.open("/param.xml","w");
+                String message;
+                message = request->getParam("wparamxml", true)->value();
+                Serial.println(message);
+                file.print(message);
+
+              request->send(204);});
+
+  server.on("/weight", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+              float sensorValue = getWeight();
+              //int val = analogRead(capteurPression);
+              String Value = String(sensorValue);
+              request->send(200, "text/plain", Value);
+              Serial.println(Value);
+            });
+  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+              //etatLedVoulu = 1;
+              request->send(204);
+             // Serial.println("On");
+            });
+
+  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+              //etatLedVoulu = 0;
+              //digitalWrite(led, LOW);
+              //etatLed = 0;
+              request->send(204);
+              // Serial.println("off");
+            });
+
+  server.on("/delayLed", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if (request->hasParam("valeurDelayLed", true))
+              {
+                String message;
+                message = request->getParam("valeurDelayLed", true)->value();
+                //if(message.toInt()!=0)
+                //valeurDelayLed = message.toInt();
+                Serial.println("valeurDelayLed");
+              }
+              request->send(204);
+            });
+  server.on("/beer_name", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if (request->hasParam("beer_name", true))
+              {
+                String message;
+                message = request->getParam("beer_name", true)->value();
+                beer_name = message;
+                
+                 Serial.println("beer_name");
+              }
+              request->send(204);
+            });
+
+    server.on("/beer_ibu", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if (request->hasParam("beer_ibu", true))
+              {
+                String message;
+                message = request->getParam("beer_ibu", true)->value();
+                //if(message.toInt()!=0)
+                //valeurDelayLed = message.toInt();
+                 Serial.println("beer_ibu");
+              }
+              request->send(204);
+            });
+   server.on("/beer_ebc", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if (request->hasParam("beer_ebc", true))
+              {
+                String message;
+                message = request->getParam("beer_ebc", true)->value();
+                //if(message.toInt()!=0)
+                //valeurDelayLed = message.toInt();
+                Serial.println("beer_ebc");
+              }
+              request->send(204);
+            });
+   server.on("/beer_abv", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if (request->hasParam("beer_abv", true))
+              {
+                String message;
+                message = request->getParam("beer_abv", true)->value();
+               // if(message.toInt()!=0)
+              //  valeurDelayLed = message.toInt();
+                Serial.println("beer_abv");
+              }
+              request->send(204);
+            });
 }
 

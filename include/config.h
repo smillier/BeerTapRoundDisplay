@@ -1,3 +1,8 @@
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
+#include <String.h>
+#include <WString.h>
 #define VERSION 0.1
 #define DEBUG_MODE //Display debug messages in serial. Comment out to disable debug messages
 
@@ -30,3 +35,8 @@
 #define HX711_dout 25 //mcu > HX711 dout pin
 #define HX711_sck 12 //mcu > HX711 sck pin
 #define SCALE_CALIBRATION_FACTOR 20710 //needs to be adapted to each scale
+
+extern String beer_name;
+ String getBeerName();
+ void setBeerName(String value);
+#endif

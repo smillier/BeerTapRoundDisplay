@@ -8,7 +8,7 @@ HX711 scale;
 void scale_setup()
 {
   scale.begin(HX711_dout, HX711_sck);
-  scale.tare();
+  //scale.tare();
   scale.set_scale(SCALE_CALIBRATION_FACTOR);
 }
 

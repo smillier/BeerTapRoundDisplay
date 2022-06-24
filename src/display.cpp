@@ -5,7 +5,7 @@
 #include <SPIFFS.h>
 #include <Arduino_GFX_Library.h>
 #include "BmpClass.h"
-
+#include <ESPAsyncWebServer.h>
 /* More data bus class: https://github.com/moononournation/Arduino_GFX/wiki/Data-Bus-Class */
 Arduino_DataBus *bus = new Arduino_ESP32SPI(TFT_DC, TFT_CS, TFT_SCK, TFT_MOSI, TFT_MISO, VSPI /* spi_num */);
 
@@ -34,6 +34,8 @@ static uint16_t cached_points_idx = 0;
 static int16_t *last_cached_point;
 int keg_level = 0;
 #include "BmpClass.h"
+#include <WString.h>
+#include <String.h>
 static BmpClass bmpClass;
 
 // Meter colour schemes
@@ -50,7 +52,6 @@ void display_init()
       Serial.println("Display begin");
     gfx->fillScreen(BACKGROUND);
     
-    
   
 #ifdef TFT_BL
     pinMode(TFT_BL, OUTPUT);
@@ -60,6 +61,7 @@ void display_init()
 
 void refresh_display()
 {
+    File dataFile = SPIFFS.open("/param.xml", "r");
     gfx->fillScreen(BACKGROUND);
     // init LCD constant
     w = gfx->width();
@@ -83,7 +85,7 @@ void refresh_display()
     // draw_square_clock_mark(
         center - markLen, center,
         center - (markLen * 2 / 3), center,
-        center - (markLen / 2), center);
+        center - (markLen / 2), center,beer_name);
 }
 
 // #########################################################################
@@ -131,7 +133,7 @@ static void bmpDrawCallback(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, i
   gfx->draw16bitRGBBitmap(x, y, bitmap, w, h);
 }
 
-void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3)
+void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3, String beer_Name)
 {
    Serial.println("Load file");
   File bmpFile = SPIFFS.open("/NSRM12.bmp", "r");
@@ -141,7 +143,7 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
     gfx->setCursor(50, 120);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
-    gfx->println("Red Irish IPA");
+    gfx->println(beer_Name);
     gfx->setCursor(70, 150);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);

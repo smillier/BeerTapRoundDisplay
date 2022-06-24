@@ -16,6 +16,7 @@ void setup(void)
 {
     //Serial.begin(115200);
     initialize();
+    initWebServer();
 }
 
 void loop()
