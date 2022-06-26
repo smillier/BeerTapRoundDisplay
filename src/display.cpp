@@ -27,7 +27,7 @@ static int16_t osx = 0, osy = 0, omx = 0, omy = 0, ohx = 0, ohy = 0; // Saved H,
 static int16_t nsx, nsy, nmx, nmy, nhx, nhy;                         // H, M, S x & y coords
 static int16_t xMin, yMin, xMax, yMax;                               // redraw range
 static int16_t hh, mm, ss;
-static unsigned long targetTime; // next action time
+static unsigned long targetTime; // next action times
 
 static int16_t *cached_points;
 static uint16_t cached_points_idx = 0;
@@ -36,6 +36,7 @@ int keg_level = 0;
 #include "BmpClass.h"
 #include <WString.h>
 #include <String.h>
+#include "Preferences.h"
 static BmpClass bmpClass;
 
 // Meter colour schemes
@@ -46,12 +47,14 @@ static BmpClass bmpClass;
 #define GREEN2RED 4
 #define RED2GREEN 5
 
+//Preferences preferences;
+
 void display_init()
 {
      gfx->begin();
       Serial.println("Display begin");
     gfx->fillScreen(BACKGROUND);
-    
+    //preferences.begin("TapDisplay", true);
   
 #ifdef TFT_BL
     pinMode(TFT_BL, OUTPUT);
@@ -61,7 +64,7 @@ void display_init()
 
 void refresh_display()
 {
-    File dataFile = SPIFFS.open("/param.xml", "r");
+   // File dataFile = SPIFFS.open("/param.xml", "r");
     gfx->fillScreen(BACKGROUND);
     // init LCD constant
     w = gfx->width();
@@ -85,7 +88,7 @@ void refresh_display()
     // draw_square_clock_mark(
         center - markLen, center,
         center - (markLen * 2 / 3), center,
-        center - (markLen / 2), center,beer_name);
+        center - (markLen / 2), center);
 }
 
 // #########################################################################
@@ -133,25 +136,37 @@ static void bmpDrawCallback(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, i
   gfx->draw16bitRGBBitmap(x, y, bitmap, w, h);
 }
 
-void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3, String beer_Name)
+void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3)
 {
-   Serial.println("Load file");
-  File bmpFile = SPIFFS.open("/NSRM12.bmp", "r");
+  
+    String beer_name = getBeerName();
+    String beer_IBU = (String)getBeerIBU();
+    String beer_Sg = (String)getBeerSg();
+    String beer_ABV = (String)getBeerABV();
+    String beer_File = getFileForEBC();
+    int beer_EBC = getBeerEBC();
+     Serial.println("Load file");
+  File bmpFile = SPIFFS.open("/"+ beer_File, "r");
   // read JPEG file header
      Serial.println("File loaded");
-    
+    Serial.println("Beer Name: " + beer_name);
+    Serial.println("Beer IBU: " + beer_IBU);
+    Serial.println("Beer Sg: " + beer_Sg);
+     Serial.println("Beer ABV: " + beer_ABV);
+     Serial.println("Beer File: " + beer_File);
     gfx->setCursor(50, 120);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
-    gfx->println(beer_Name);
+    gfx->println(beer_name);
+    Serial.println(beer_name);
     gfx->setCursor(70, 150);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
-    gfx->println("IBU: 57");
+    gfx->println("IBU: " + beer_IBU);
     gfx->setCursor(70, 170);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
-    gfx->println("ABV: 6.5%");
+    gfx->println("ABV: " + beer_ABV);
     gfx->setCursor(50, 190);
     gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
     gfx->setTextColor(WHITE);
@@ -159,16 +174,14 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
      Serial.println("Get weight");
     float kegWeight  = getWeight();
      Serial.println("Weight:");
-    int valueToPrint = (100/0.33) * kegWeight;
-    gfx->println("Keg: " + String(kegWeight) + "Kg ");
+     float volume = getVolume();
+    int valueToPrint = (100/19) * volume;
+    gfx->println("Keg: " + String(volume) + "L");
     // Set the the position, gap between meters, and inner radius of the meters
     int xpos = 0, ypos = 5, gap = 4, radius = 120;
 
     // Draw meter and get back x position of next meter
-
-    
-    
-    xpos = gap + ringMeter(valueToPrint, 0, 100, xpos, ypos, radius, "mA", RED2GREEN); // Draw analogue meter
+    xpos = gap + ringMeter(valueToPrint, 0, 100, xpos, ypos, radius, "L", RED2GREEN); // Draw analogue meter
     Serial.println("DrawBMP");
     bmpClass.draw(
         &bmpFile, bmpDrawCallback, false /* useBigEndian */,
@@ -176,6 +189,7 @@ void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, in
 
     bmpFile.close();
     Serial.println("End of display init");
+    //preference.end();
 }
 
 // #########################################################################

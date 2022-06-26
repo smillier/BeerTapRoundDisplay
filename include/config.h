@@ -3,6 +3,7 @@
 
 #include <String.h>
 #include <WString.h>
+#include "Preferences.h"
 #define VERSION 0.1
 #define DEBUG_MODE //Display debug messages in serial. Comment out to disable debug messages
 
@@ -36,7 +37,20 @@
 #define HX711_sck 12 //mcu > HX711 sck pin
 #define SCALE_CALIBRATION_FACTOR 20710 //needs to be adapted to each scale
 
-extern String beer_name;
- String getBeerName();
- void setBeerName(String value);
+extern String getBeerName();
+extern void setBeerName(String value);
+
+extern float getBeerSg();
+extern void setBeerSg(float value);
+
+extern int getBeerIBU();
+extern void setBeerIBU(int value);
+
+extern int getBeerEBC();
+extern void setBeerEBC(int value);
+
+extern float getBeerABV();
+extern void setBeerABV(float value);
+
+extern String getFileForEBC();
 #endif

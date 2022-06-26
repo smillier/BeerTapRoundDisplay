@@ -21,3 +21,9 @@ float getWeight()
 {
   return scale.get_units(10);
 }
+
+float getVolume()
+{
+  float sg = getBeerSg();
+  float volume = getWeight();
+}

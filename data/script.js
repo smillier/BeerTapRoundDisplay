@@ -21,30 +21,106 @@ $(document).ready(function(){
                         function()
                         {    document.getElementById("beer_name").value = $(this).text();
                             $(this).value =document.getElementById(beer_name).value;
-                      });
-                      $(this).find("beer_ibu").each(
+                      });   
+                                          });
+
+                }
+    });
+    
+});
+
+//BEER IBU
+$(document).ready(function(){
+    $.ajax( {
+        type: "GET",
+        url: "param.xml",
+        dataType: "xml",
+        success: function(xml) 
+                 {
+                   $(xml).find("param").each(
+                     function()
+                     {
+                        $(this).find("beer_ibu").each(
                         function()
                         {    document.getElementById("beer_ibu").value = $(this).text();
                             $(this).value =document.getElementById(beer_ibu).value;
-                      });
+                      });   
                     });
 
                 }
     });
     
-    $.ajax({
-        url: "wparam.xml",
-        data: "<test>1</test>", 
-        type: "POST",
-        contentType: "text/xml",
-        dataType: "text",
-        success : parse,
-        error : function (xhr, ajaxOptions, thrownError){  
-            console.log(xhr.status);          
-            console.log(thrownError);
-        } 
-    }); 
 });
+
+//BEER SG
+$(document).ready(function(){
+    $.ajax( {
+        type: "GET",
+        url: "param.xml",
+        dataType: "xml",
+        success: function(xml) 
+                 {
+                   $(xml).find("param").each(
+                     function()
+                     {
+                        $(this).find("beer_sg").each(
+                        function()
+                        {    document.getElementById("beer_sg").value = $(this).text();
+                            $(this).value =document.getElementById(beer_sg).value;
+                      });   
+                    });
+
+                }
+    });
+    
+});
+
+//BEER ABV
+$(document).ready(function(){
+    $.ajax( {
+        type: "GET",
+        url: "param.xml",
+        dataType: "xml",
+        success: function(xml) 
+                 {
+                   $(xml).find("param").each(
+                     function()
+                     {
+                        $(this).find("beer_abv").each(
+                        function()
+                        {    document.getElementById("beer_abv").value = $(this).text();
+                            $(this).value =document.getElementById(beer_abv).value;
+                      });   
+                    });
+
+                }
+    });
+    
+});
+
+//BEER EBC
+$(document).ready(function(){
+    $.ajax( {
+        type: "GET",
+        url: "param.xml",
+        dataType: "xml",
+        success: function(xml) 
+                 {
+                   $(xml).find("param").each(
+                     function()
+                     {
+                        $(this).find("beer_ebc").each(
+                        function()
+                        {    document.getElementById("beer_ebc").value = $(this).text();
+                            $(this).value =document.getElementById(beer_ebc).value;
+                      });   
+                    });
+
+                }
+    });
+    
+});
+
 
 $(document).ready(function(){
     $("#save_settings").click(function(){
@@ -72,9 +148,9 @@ $(document).ready(function(){
         });
     });
     $("#save_settings").click(function(){
-        var valeur = XMLString();
-        $.post("wparamxml",{
-            wparamxml: valeur
+        var valeur = $("#beer_sg").val();
+        $.post("beer_sg",{
+           beer_sg: valeur
         });
     });
 });
@@ -104,20 +180,6 @@ setInterval(function getData() {
     };
 
     xhttp.open("GET","weight", true);
-    xhttp.send();
-}, 2000);
-
-
-setInterval(function getData() {
-    var xhttp = new XMLHttpRequest();
-
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("lectureValeur2").innerHTML = this.responseText;
-        }
-    };
-
-    xhttp.open("GET","lectureValeur2", true);
     xhttp.send();
 }, 2000);
 

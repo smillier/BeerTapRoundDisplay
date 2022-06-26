@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <param>
-    <beer_name id="1">Citra IPA</valeurSaisi>
-    <beer_ibu id="2">120</valeurSaisi>
-    <beer_ebc id="3">30</valeurSaisi>
-    <beer_abv id="4">5.5</valeurSaisi>     
+    <beer_name id="1">Citra IPA</beer_name>
+    <beer_ibu id="2">120</beer_ibu>
+    <beer_ebc id="3">30</beer_ebc>
+    <beer_abv id="4">5.5</beer_abv>    
+    <beer_sg id="5">1.008</beer_sg>  
 </param>

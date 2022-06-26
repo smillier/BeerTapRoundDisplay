@@ -11,16 +11,22 @@
 #include <string>
 #include <SPIFFS.h>
 #include <ArduinoOTA.h>
+#include "Preferences.h"
+
+//Preferences preference;
+
 
 void setup(void)
 {
     //Serial.begin(115200);
+    
     initialize();
     initWebServer();
 }
 
 void loop()
 {
+   // Serial.println(Config.beer_name);
     refresh_display();
     //redraw_hands_cached_draw_and_erase();
    delayMicroseconds(5000000);

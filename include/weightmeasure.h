@@ -4,5 +4,5 @@
 extern void scale_setup();
 extern void scale_calibrate();
 extern float getWeight();
-
+extern float getVolume();
 #endif

@@ -16,11 +16,13 @@
 #include "display.h"
 AsyncWebServer server(80);
 #include "config.h"
+#include "Preferences.h"
 
+//Preferences preference;
 
 void initialize()
 {
-    //AsyncWebServer webServer(80);
+ //AsyncWebServer webServer(80);
 #if !( USING_ESP32_S2 || USING_ESP32_C3 )
 DNSServer dnsServer;
 #endif
@@ -182,7 +184,8 @@ void initWebServer()
               {
                 String message;
                 message = request->getParam("beer_name", true)->value();
-                beer_name = message;
+                setBeerName(message);
+               // preference.putString("beer_name",message);
                 
                  Serial.println("beer_name");
               }
@@ -195,35 +198,61 @@ void initWebServer()
               {
                 String message;
                 message = request->getParam("beer_ibu", true)->value();
-                //if(message.toInt()!=0)
-                //valeurDelayLed = message.toInt();
-                 Serial.println("beer_ibu");
+                if(message.toInt()!=0)
+                setBeerIBU(message.toInt());
+                Serial.println("beer_ibu");
               }
-              request->send(204);
+              int ibu = getBeerIBU();
+              String Value = String(ibu);
+                Serial.println(Value);
+              request->send(200, "text/plain", Value);
+              //request->send(204);
             });
    server.on("/beer_ebc", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              int EBC = getBeerEBC();
               if (request->hasParam("beer_ebc", true))
               {
                 String message;
                 message = request->getParam("beer_ebc", true)->value();
-                //if(message.toInt()!=0)
+                if(message.toInt()!=0)
+                  setBeerEBC(message.toInt());
                 //valeurDelayLed = message.toInt();
                 Serial.println("beer_ebc");
               }
-              request->send(204);
+              
+               Serial.println((String)EBC);
+              request->send(200, "text/plain", (String)EBC);
+             
             });
    server.on("/beer_abv", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              float ABV = getBeerABV();
               if (request->hasParam("beer_abv", true))
               {
                 String message;
                 message = request->getParam("beer_abv", true)->value();
-               // if(message.toInt()!=0)
-              //  valeurDelayLed = message.toInt();
+               if(message.toFloat()!=0.0)
+                ABV = message.toFloat();
+                setBeerABV(ABV);
                 Serial.println("beer_abv");
               }
-              request->send(204);
+              request->send(200, "text/plain", (String)ABV);
             });
+    server.on("/beer_sg", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              float sg = getBeerSg();
+              if (request->hasParam("beer_sg", true))
+              {
+                String message;
+                message = request->getParam("beer_sg", true)->value();
+               if(message.toFloat()!=0.0)
+                sg = message.toFloat();
+                setBeerSg(sg);
+                Serial.println("beer_sg");
+              }
+              request->send(200, "text/plain", (String)sg);
+            });
+           // preference.end();
 }
 
