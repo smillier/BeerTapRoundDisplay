@@ -29,7 +29,7 @@ void loop()
    // Serial.println(Config.beer_name);
     refresh_display();
     //redraw_hands_cached_draw_and_erase();
-   delayMicroseconds(5000000);
+   delayMicroseconds(2000000); //2000000
     ArduinoOTA.handle();    
 }
 

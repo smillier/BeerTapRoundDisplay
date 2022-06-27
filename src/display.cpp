@@ -19,19 +19,6 @@ Arduino_GFX *gfx = new Arduino_GC9A01(bus, TFT_RST, 0 /* rotation */, true /* IP
 /*******************************************************************************
  * End of Arduino_GFX setting
  ******************************************************************************/
-
-static int16_t w, h, center;
-static int16_t hHandLen, mHandLen, sHandLen, markLen;
-static float sdeg, mdeg, hdeg;
-static int16_t osx = 0, osy = 0, omx = 0, omy = 0, ohx = 0, ohy = 0; // Saved H, M, S x & y coords
-static int16_t nsx, nsy, nmx, nmy, nhx, nhy;                         // H, M, S x & y coords
-static int16_t xMin, yMin, xMax, yMax;                               // redraw range
-static int16_t hh, mm, ss;
-static unsigned long targetTime; // next action times
-
-static int16_t *cached_points;
-static uint16_t cached_points_idx = 0;
-static int16_t *last_cached_point;
 int keg_level = 0;
 #include "BmpClass.h"
 #include <WString.h>
@@ -49,6 +36,14 @@ static BmpClass bmpClass;
 
 //Preferences preferences;
 
+// pixel drawing callback
+static void bmpDrawCallback(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, int16_t h)
+{
+  // Serial.printf("Draw pos = %d, %d. size = %d x %d\n", x, y, w, h);
+  gfx->draw16bitRGBBitmap(x, y, bitmap, w, h);
+}
+
+
 void display_init()
 {
      gfx->begin();
@@ -60,35 +55,62 @@ void display_init()
     pinMode(TFT_BL, OUTPUT);
     digitalWrite(TFT_BL, HIGH);
 #endif
+    gfx->setCursor(50, 120);
+    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    gfx->setTextColor(WHITE);
+
+    String beer_name = getBeerName();
+    String beer_IBU = (String)getBeerIBU();
+    String beer_Sg = (String)getBeerSg();
+    String beer_ABV = (String)getBeerABV();
+    String beer_File = getFileForEBC();
+    int beer_EBC = getBeerEBC();
+     Serial.println("Load file");
+    File bmpFile = SPIFFS.open("/"+ beer_File, "r");
+    // read JPEG file header
+     Serial.println("File loaded");
+    Serial.println("Beer Name: " + beer_name);
+    Serial.println("Beer IBU: " + beer_IBU);
+    Serial.println("Beer Sg: " + beer_Sg);
+     Serial.println("Beer ABV: " + beer_ABV);
+     Serial.println("Beer File: " + beer_File);
+    gfx->setCursor(50, 120);
+    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    gfx->setTextColor(WHITE);
+    gfx->println(beer_name);
+    Serial.println(beer_name);
+    gfx->setCursor(70, 150);
+    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    gfx->setTextColor(WHITE);
+    gfx->println("IBU: " + beer_IBU);
+    gfx->setCursor(70, 170);
+    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    gfx->setTextColor(WHITE);
+    gfx->println("ABV: " + beer_ABV);
+    gfx->setCursor(50, 190);
+     Serial.println("DrawBMP");
+    bmpClass.draw(
+        &bmpFile, bmpDrawCallback, false /* useBigEndian */,
+        0 /* x */, -50 /* y */, gfx->width() /* widthLimit */, gfx->height() /* heightLimit */);
+
+    bmpFile.close();
+    Serial.println("End of display init");
 }
 
 void refresh_display()
 {
    // File dataFile = SPIFFS.open("/param.xml", "r");
-    gfx->fillScreen(BACKGROUND);
+    //gfx->fillScreen(BACKGROUND);
     // init LCD constant
-    w = gfx->width();
-    h = gfx->height();
-    if (w < h)
-    {
-        center = w / 2;
-    }
-    else
-    {
-        center = h / 2;
-    }
-    hHandLen = center * 3 / 8;
-    mHandLen = center * 2 / 3;
-    sHandLen = center * 5 / 6;
-    markLen = sHandLen / 6;
-    cached_points = (int16_t *)malloc((hHandLen + 1 + mHandLen + 1 + sHandLen + 1) * 2 * 2);
+    clearDynamicZones();
+   updateMeter();
 
     // Draw 60 clock marks
-    draw_round_clock_mark(
+   // draw_round_clock_mark(
     // draw_square_clock_mark(
-        center - markLen, center,
-        center - (markLen * 2 / 3), center,
-        center - (markLen / 2), center);
+      //  center - markLen, center,
+       // center - (markLen * 2 / 3), center,
+       // center - (markLen / 2), center);
 }
 
 // #########################################################################
@@ -129,66 +151,39 @@ unsigned int rainbow(uint8_t value)
 }
 
 
-// pixel drawing callback
-static void bmpDrawCallback(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, int16_t h)
+
+void clearDynamicZones()
 {
-  // Serial.printf("Draw pos = %d, %d. size = %d x %d\n", x, y, w, h);
-  gfx->draw16bitRGBBitmap(x, y, bitmap, w, h);
+    //gfx->fillRect(50,190,230,20,BLACK);
+    //clearMeter(100)
 }
 
-void draw_round_clock_mark(int16_t innerR1, int16_t outerR1, int16_t innerR2, int16_t outerR2, int16_t innerR3, int16_t outerR3)
+
+
+void updateMeter()
 {
   
-    String beer_name = getBeerName();
-    String beer_IBU = (String)getBeerIBU();
-    String beer_Sg = (String)getBeerSg();
-    String beer_ABV = (String)getBeerABV();
-    String beer_File = getFileForEBC();
-    int beer_EBC = getBeerEBC();
-     Serial.println("Load file");
-  File bmpFile = SPIFFS.open("/"+ beer_File, "r");
-  // read JPEG file header
-     Serial.println("File loaded");
-    Serial.println("Beer Name: " + beer_name);
-    Serial.println("Beer IBU: " + beer_IBU);
-    Serial.println("Beer Sg: " + beer_Sg);
-     Serial.println("Beer ABV: " + beer_ABV);
-     Serial.println("Beer File: " + beer_File);
-    gfx->setCursor(50, 120);
-    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
-    gfx->setTextColor(WHITE);
-    gfx->println(beer_name);
-    Serial.println(beer_name);
-    gfx->setCursor(70, 150);
-    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
-    gfx->setTextColor(WHITE);
-    gfx->println("IBU: " + beer_IBU);
-    gfx->setCursor(70, 170);
-    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
-    gfx->setTextColor(WHITE);
-    gfx->println("ABV: " + beer_ABV);
-    gfx->setCursor(50, 190);
-    gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
-    gfx->setTextColor(WHITE);
+    
     //Get Keg weight
      Serial.println("Get weight");
-    float kegWeight  = getWeight();
-     Serial.println("Weight:");
+    //float kegWeight  = getWeight();
+    // Serial.println("Weight:");
      float volume = getVolume();
     int valueToPrint = (100/19) * volume;
-    gfx->println("Keg: " + String(volume) + "L");
+   // gfx->setCursor(50, 190);
+    //gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    //gfx->setTextColor(BLACK);
+    //gfx->println("Keg: " + String(volume) + "L");
+    //gfx->setCursor(50, 190);
+    //gfx->setTextSize(2 /* x scale */, 2 /* y scale */, 2);
+    //gfx->setTextColor(WHITE);
+    //gfx->println("Keg: " + String(volume) + "L");
     // Set the the position, gap between meters, and inner radius of the meters
     int xpos = 0, ypos = 5, gap = 4, radius = 120;
 
     // Draw meter and get back x position of next meter
     xpos = gap + ringMeter(valueToPrint, 0, 100, xpos, ypos, radius, "L", RED2GREEN); // Draw analogue meter
-    Serial.println("DrawBMP");
-    bmpClass.draw(
-        &bmpFile, bmpDrawCallback, false /* useBigEndian */,
-        0 /* x */, -50 /* y */, gfx->width() /* widthLimit */, gfx->height() /* heightLimit */);
-
-    bmpFile.close();
-    Serial.println("End of display init");
+   
     //preference.end();
 }
 
@@ -257,117 +252,6 @@ int ringMeter(int value, int vmin, int vmax, int x, int y, int r, char *units, u
   }
 }
 
-void write_cache_pixel(int16_t x, int16_t y, int16_t color, bool cross_check_second, bool cross_check_hour)
-{
-    int16_t *cache = cached_points;
-    if (cross_check_second)
-    {
-        for (uint16_t i = 0; i <= sHandLen; i++)
-        {
-            if ((x == *(cache++)) && (y == *(cache)))
-            {
-                return;
-            }
-            cache++;
-        }
-    }
-    if (cross_check_hour)
-    {
-        cache = cached_points + ((sHandLen + 1) * 2);
-        for (uint16_t i = 0; i <= hHandLen; i++)
-        {
-            if ((x == *(cache++)) && (y == *(cache)))
-            {
-                return;
-            }
-            cache++;
-        }
-    }
-    gfx->writePixel(x, y, color);
-}
-
-void draw_and_erase_cached_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t color, int16_t *cache, int16_t cache_len, bool cross_check_second, bool cross_check_hour)
-{
-       #if defined(ESP8266)
-    yield();
-#endif
-    bool steep = _diff(y1, y0) > _diff(x1, x0);
-    if (steep)
-    {
-        _swap_int16_t(x0, y0);
-        _swap_int16_t(x1, y1);
-    }
-
-    int16_t dx, dy;
-    dx = _diff(x1, x0);
-    dy = _diff(y1, y0);
-
-    int16_t err = dx / 2;
-    int8_t xstep = (x0 < x1) ? 1 : -1;
-    int8_t ystep = (y0 < y1) ? 1 : -1;
-    x1 += xstep;
-    int16_t x, y, ox, oy;
-    for (int16_t i = 0; i <= dx; i++)
-    {
-        if (steep)
-        {
-            x = y0;
-            y = x0;
-        }
-        else
-        {
-            x = x0;
-            y = y0;
-        }
-        ox = *(cache + (i * 2));
-        oy = *(cache + (i * 2) + 1);
-        if ((x == ox) && (y == oy))
-        {
-            if (cross_check_second || cross_check_hour)
-            {
-                write_cache_pixel(x, y, color, cross_check_second, cross_check_hour);
-            }
-        }
-        else
-        {
-            write_cache_pixel(x, y, color, cross_check_second, cross_check_hour);
-            if ((ox > 0) || (oy > 0))
-            {
-                write_cache_pixel(ox, oy, BACKGROUND, cross_check_second, cross_check_hour);
-            }
-            *(cache + (i * 2)) = x;
-            *(cache + (i * 2) + 1) = y;
-        }
-        if (err < dy)
-        {
-            y0 += ystep;
-            err += dx;
-        }
-        err -= dy;
-        x0 += xstep;
-    }
-    for (int16_t i = dx + 1; i < cache_len; i++)
-    {
-        ox = *(cache + (i * 2));
-        oy = *(cache + (i * 2) + 1);
-        if ((ox > 0) || (oy > 0))
-        {
-            write_cache_pixel(ox, oy, BACKGROUND, cross_check_second, cross_check_hour);
-        }
-        *(cache + (i * 2)) = 0;
-        *(cache + (i * 2) + 1) = 0;
-    }
-  
-}
 
 
-
-void redraw_hands_cached_draw_and_erase()
-{
-    gfx->startWrite();
-    draw_and_erase_cached_line(center, center, nsx, nsy, SECOND_COLOR, cached_points, sHandLen + 1, false, false);
-   // draw_and_erase_cached_line(center, center, nhx, nhy, HOUR_COLOR, cached_points + ((sHandLen + 1) * 2), hHandLen + 1, true, false);
-   // draw_and_erase_cached_line(center, center, nmx, nmy, MINUTE_COLOR, cached_points + ((sHandLen + 1 + hHandLen + 1) * 2), mHandLen + 1, true, true);
-    gfx->endWrite();
-}
 

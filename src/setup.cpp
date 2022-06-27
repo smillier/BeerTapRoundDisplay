@@ -22,6 +22,9 @@ AsyncWebServer server(80);
 
 void initialize()
 {
+  Serial.println("Init display");
+
+  
  //AsyncWebServer webServer(80);
 #if !( USING_ESP32_S2 || USING_ESP32_C3 )
 DNSServer dnsServer;
@@ -102,9 +105,8 @@ DNSServer dnsServer;
         Serial.println("SPIFFS Mount Failed");
         return;
     }
-     Serial.println("Init display");
-
-  display_init();
+     
+     display_init();
    Serial.println("Scale setup");
  scale_setup();
   //scale_calibrate();

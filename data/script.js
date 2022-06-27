@@ -164,6 +164,7 @@ file += "<beer_name id='1'>"+document.getElementById("beer_name").value+"</beer_
 file += "<beer_ibu id='2'>"+document.getElementById("beer_ibu").value+"</beer_ibu>";
 file += "<beer_ebc id='3'>"+document.getElementById("beer_ebc").value+"</beer_ebc>";
 file += "<beer_abv id='4'>"+document.getElementById("beer_abv").value+"</beer_abv>";
+file += "<beer_sg id='5'>"+document.getElementById("beer_sg").value+"</beer_sg>";
 file += "</param>";
 return file;
 }

@@ -19,11 +19,14 @@ void scale_calibrate()
 
 float getWeight()
 {
-  return scale.get_units(10);
+  return scale.get_units(2);
 }
 
 float getVolume()
 {
   float sg = getBeerSg();
-  float volume = getWeight();
+  if (sg == 0.0)
+    return 0.0;
+  float volume = getWeight() / sg;
+  return volume;
 }
