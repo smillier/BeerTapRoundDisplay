@@ -16,11 +16,19 @@
     </div>
 
     <div class="w3-margin w3-center w3-card w3-padding-24 w3-border w3-round-large ">
-        <h3 class="w3-padding">Initialize scale</h3>
-        <button id="scale_init" onclick="onButton()" class="w3-button w3-green w3-xlarge w3-ripple w3-wide"
-            style="width:40%;">Start</button>
+        <h3 class="w3-padding">System</h3>
+        <button id="sys_restart" onclick="onButton()" class="w3-button w3-green w3-xlarge w3-ripple w3-wide"
+            style="width:40%;">Restart</button>
+            <button id="sys_resetWifi" onclick="onButton()" class="w3-button w3-green w3-xlarge w3-ripple w3-wide"
+            style="width:40%;">Reset wifi settings</button>
     </div>
 
+    <div class="w3-row w3-center w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
+        <div class="w3-half w3-container  ">
+            <h3 class="w3-padding"> Weight </h3>
+            <p class="w3-xxlarge"><span id="weight">0</span> Kg </p>   
+        </div>
+    </div>
 
     <div class="w3-container w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
         <h3 class="w3-padding-24">Beer Settings</h3>
@@ -38,12 +46,16 @@
         <br><br>
         <button id="save_settings" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Save</button>
     </div>     
-    <div class="w3-row w3-center w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
-        <div class="w3-half w3-container  ">
-            <h3 class="w3-padding"> Weight </h3>
-            <p class="w3-xxlarge"><span id="weight">0</span> Kg </p>   
-        </div>
-    </div>
+    <div class="w3-container w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
+        <h3 class="w3-padding-24">Keg Settings</h3>
+        <input type="number" id="keg_number" name="keg_number"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
+        style="width:150px;"> Keg number</input><br>
+        <input type="number" min="0.9" max="10"  required placeholder="0-10 Kg" id="keg_weight" name="keg_weight"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
+        style="width:25%;"> Keg weight (Empty)</input><br>
+        <br><br>
+        <button id="save_keg_settings" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Save</button>
+    </div>  
+    
         <button id="Tare" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Tare</button>
     </div>
 </body>
