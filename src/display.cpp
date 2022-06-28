@@ -64,7 +64,7 @@ void display_init()
     String beer_Sg = (String)getBeerSg();
     String beer_ABV = (String)getBeerABV();
     String beer_File = getFileForEBC();
-    int beer_EBC = getBeerEBC();
+    //int beer_EBC = getBeerEBC();
      Serial.println("Load file");
     File bmpFile = SPIFFS.open("/"+ beer_File, "r");
     // read JPEG file header
