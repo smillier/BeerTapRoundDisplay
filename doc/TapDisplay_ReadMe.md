@@ -3,6 +3,23 @@ Kegerator custom display using GC9A01 1.28" round display, hx711 with weight sen
 Project is fully functionnal now for my needs. Lot of improvements are coming.
 ![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/render1.png)
 ## Hardware list
+
+<table>
+<thead>
+	<tr>
+		<th>Header 1</th>
+		<th>Header 2</th>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+		<td>Row 1 Column 1</td>
+		<td>Row 1 Column 2</td>
+	</tr>
+</tbody>
+</table>
+
+
 +--------------------------+-----------------+----------------+
 | Hardware                 | Indic. Price    | Link           |
 +==========================+=================+================+
