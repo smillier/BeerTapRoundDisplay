@@ -1,6 +1,6 @@
 # BeerTapRoundDisplay
 Kegerator custom display using GC9A01 1.28" round display, hx711 with weight sensors and ESP32.
-Project is fully functionnal now for my needs. Lot of improvements are coming.
+Project is fully working now for my needs. Lot of improvements are coming.
 ![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/render1.png)
 ## Hardware list
 
@@ -41,9 +41,22 @@ Project is fully functionnal now for my needs. Lot of improvements are coming.
 </tbody>
 </table>
 
-## Hardware schema and assembly
-![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/schema.png)
+## Flashing the ESP32
+The ESP32 must first be flashed by USB. OTA is then available for future updates of the firmware.
+1. Install VSCode
+Follow the procedure here to download and install VSCode.
+<a href="https://code.visualstudio.com/" target="_blank">https://code.visualstudio.com/</a>
+2. Install PlatformIO extension 
+Start VSCode and install the PlatformIO extension. See here:
+https://platformio.org/install/ide?install=vscode
+3. Download this repository
+In a terminal use this command to clone this repo:
+```dos
+git clone https://github.com/smillier/BeerTapRoundDisplay.git
+```
 
+## Hardware schema and assembly
+![display](./doc/schema.png)
 ![display](./doc/LevelScreen.jpg)
 ![display](./doc/IMG_20220629_183823.jpg)
 ![display](./doc/IMG_20220629_185508.jpg)
@@ -51,7 +64,7 @@ Project is fully functionnal now for my needs. Lot of improvements are coming.
 ![display](./doc/schema.png)
 ![display](./doc/PCB.png)
 
-## Firmware configuration
+
 
 
 
