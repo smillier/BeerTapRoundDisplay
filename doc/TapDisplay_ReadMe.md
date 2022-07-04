@@ -7,33 +7,39 @@ Project is fully functionnal now for my needs. Lot of improvements are coming.
 <table>
 <thead>
 	<tr>
-		<th>Header 1</th>
-		<th>Header 2</th>
+		<th>Hardware</th>
+		<th>Indic. price</th>
+		<th>Link</th>
 	</tr>
 </thead>
 <tbody>
 	<tr>
-		<td>Row 1 Column 1</td>
-		<td>Row 1 Column 2</td>
+		<td>ESP32 (Az-Delivery)</td>
+		<td>11.99€</td>
+		<td><a href="https://www.amazon.fr/gp/product/B071P98VTG/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&th=1" target ="blank">Amazon</a></td>
+	</tr>
+	<tr>
+		<td>GC9A01 1.28" Oled Display</td>
+		<td>5.93€</td>
+		<td><a href="https://www.aliexpress.com/item/1005004296043855.html?spm=a2g0o.order_list.0.0.5a9f1802KPwI7w" target ="blank">AliExpress</a></td>
+	</tr>
+	<tr>
+		<td>HX711 + Weight Sensors</td>
+		<td>4.20€</td>
+		<td><a href="https://www.aliexpress.com/item/1005002176327047.html?spm=a2g0o.order_list.0.0.22171802zh8MgL" target ="blank">AliExpress</a></td>
+	</tr>
+	<tr>
+		<td>(Optionnal) 5V power supply</td>
+		<td>15.67€</td>
+		<td><a href="https://www.amazon.fr/LED-Alimentation-15W-MeanWell-LPV-20-5/dp/B00MWQEMXG/ref=sr_1_57?crid=4FTTWEKA2H&keywords=5v+power+supply&qid=1656929563&sprefix=5V+po%2Caps%2C91&sr=8-57" target ="blank">Amazon</a></td>
+	</tr>
+		<tr>
+		<td>PCB</td>
+		<td>To be defined</td>
+		<td><a href="https://www.amazon.fr/LED-Alimentation-15W-MeanWell-LPV-20-5/dp/B00MWQEMXG/ref=sr_1_57?crid=4FTTWEKA2H&keywords=5v+power+supply&qid=1656929563&sprefix=5V+po%2Caps%2C91&sr=8-57" target ="blank">OSHPark / PCBWay / JLCPCB</a></td>
 	</tr>
 </tbody>
 </table>
-
-
-+--------------------------+-----------------+----------------+
-| Hardware                 | Indic. Price    | Link           |
-+==========================+=================+================+
-|ESP32 (Az-Delivery)       | 11.99€          | [Amazon](https://www.amazon.fr/gp/product/B071P98VTG/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&th=1)
-+--------------------------+-----------------+----------------+
-|GC9A01 1.28" Oled Display | 5.93€           |[AliExpress](https://www.aliexpress.com/item/1005004296043855.html?spm=a2g0o.order_list.0.0.5a9f1802KPwI7w)
-+--------------------------+-----------------+----------------+
-|HX711 + Weight Sensors    | 4.20€           | <a href="https://www.aliexpress.com/item/1005002176327047.html?spm=a2g0o.order_list.0.0.22171802zh8MgL" target="_blank">AliExpress</a>
-+--------------------------+-----------------+----------------+
-|(Optionnal)5V power supply| 15.67€          | <a href="https://www.amazon.fr/LED-Alimentation-15W-MeanWell-LPV-20-5/dp/B00MWQEMXG/ref=sr_1_57?crid=4FTTWEKA2H&keywords=5v+power+supply&qid=1656929563&sprefix=5V+po%2Caps%2C91&sr=8-57" target="_blank">Amazon</a> (Can also be powered via usb directly on ESP32)
-+--------------------------+-----------------+----------------+
-|PCB                       | N.C.            | OSHPark
-+--------------------------+-----------------+----------------+
-
 
 ## Hardware schema and assembly
 ![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/schema.png)
