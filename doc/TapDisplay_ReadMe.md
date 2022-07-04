@@ -1,3 +1,7 @@
+# BeerTapRoundDisplay
+Kegerator custom display using GC9A01 1.28" round display, hx711 with weight sensors and ESP32.
+Project is fully functionnal now for my needs. Lot of improvements are coming.
+![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/render1.png)
 ## Hardware list
 +--------------------------+-----------------+----------------+
 | Hardware                 | Indic. Price    | Link           |
