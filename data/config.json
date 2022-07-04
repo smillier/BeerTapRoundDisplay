@@ -1,0 +1,24 @@
+{
+    "ssid":"Livebox-0479",
+    "psk":"AA258FE563CEA84BDAC",
+    "host":"Remora_D8DEBE",
+    "ap_psk":"",
+    "emon_host":"emoncms.org",
+    "emon_port":"80",
+    "emon_url":"/input.json",
+    "emon_apikey":"sdfsdsdsds",
+    "emon_node":"0",
+
+    "jdom_host":"jeedom.local",
+    "jdom_port":"12",
+    "jdom_url":"/jeedom/plugins/teleinfo/core/php/jeeTeleinfo.php",
+    "jdom_apikey":"12345678901234567890123456789012345678901234567890",
+    "jdom_adco":"123456789012",
+
+    "ota_auth":"WifInfo_8266",
+    "ota_port":"8266",
+
+    "cfg_debug":1,
+    "cfg_oled":false,
+    "cfg_rgb":true
+}
