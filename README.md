@@ -31,7 +31,7 @@ Project is fully working now for my needs. Lot of improvements are coming.
 	<tr>
 		<td>(Optionnal) 5V power supply</td>
 		<td>15.67€</td>
-		<td><a href="https://www.amazon.fr/LED-Alimentation-15W-MeanWell-LPV-20-5/dp/B00MWQEMXG/ref=sr_1_57?crid=4FTTWEKA2H&keywords=5v+power+supply&qid=1656929563&sprefix=5V+po%2Caps%2C91&sr=8-57" target ="blank">Amazon</a></td>
+		<td><a href="https://www.amazon.fr/LED-Alimentation-15W-MeanWell-LPV-20-5/dp/B00MWQEMXG/ref=sr_1_57?crid=4FTTWEKA2H&keywords=5v+power+supply&qid=1656929563&sprefix=5V+po%2Caps%2C91&sr=8-57" target ="blank">Amazon</a><br>Could also be powered by ESP32 micro USB</td>
 	</tr>
 		<tr>
 		<td>PCB</td>
