@@ -1,0 +1,10 @@
+# Name,   Type, SubType, Offset,  Size, Flags
+# Custom scheme for a 4MB flash board: the default Arduino-ESP32 partition
+# table only gives ~1.25MB per OTA app slot, too small once NimBLE +
+# ElegantOTA + ESPAsyncWebServer are all linked in. SPIFFS only needs to
+# hold the small web UI (~380KB), so it's shrunk accordingly to make room.
+nvs,      data, nvs,     0x9000,  0x5000,
+otadata,  data, ota,     0xe000,  0x2000,
+app0,     app,  ota_0,   0x10000, 0x1C0000,
+app1,     app,  ota_1,   0x1D0000,0x1C0000,
+spiffs,   data, spiffs,  0x390000,0x70000,
