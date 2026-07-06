@@ -70,14 +70,23 @@
 #define RIGHT_STOP 5.4977 //7PI/4
 #define LEFT_STOP 3.9 //5PI/4
 
-//GC9A01 TFT pins:
-#define TFT_BL 21
-#define TFT_DC 4
-#define TFT_CS 5
-#define TFT_SCK 18
-#define TFT_MOSI 23
+// GC9A01 TFT pins - JCZN ESP32-2424S012 board (ESP32-C3 + 1.28" round touch
+// display). RST is not broken out on this board (tied to the module's own
+// reset), so it's left unconnected and the panel is reset over SPI instead.
+#define TFT_BL 3
+#define TFT_DC 2
+#define TFT_CS 10
+#define TFT_SCK 6
+#define TFT_MOSI 7
 #define TFT_MISO -1
-#define TFT_RST 16
+#define TFT_RST -1
+
+// CST816 capacitive touch controller (I2C), same board
+#define TOUCH_SDA 4
+#define TOUCH_SCL 5
+#define TOUCH_RST 1
+#define TOUCH_INT 0
+#define TOUCH_I2C_ADDR 0x15
 
 // ---------------------------------------------------------------------------
 // BLE identity & protocol (weight comes from the remote scale board now,

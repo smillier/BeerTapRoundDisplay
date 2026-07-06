@@ -5,10 +5,12 @@
 Fork of [BeerTapRoundDisplay](https://github.com/smillier/BeerTapRoundDisplay) that separates the scale (HX711 + weight sensors) from the round GC9A01 display. The two boards communicate over Bluetooth Low Energy instead of being wired together on a single ESP32.
 ─────────────────────────┐        BLE (GATT)        ┌──────────────────────────┐
 │   scale-esp32c6          │  ────────────────────►   │   display-esp32          │
-│   ESP32-C6 + HX711       │   notify weight (g)       │   ESP32 + round GC9A01   │
+│   ESP32-C6 + HX711       │   notify weight (g)       │   ESP32-C3 + round touch │
 │   under the keg           │  ◄────────────────────   │   Wifi + WebServer + OTA │
 │                          │   tare command             │   computes volume        │
 └─────────────────────────┘                            └──────────────────────────┘
+
+`display-esp32` now targets an all-in-one **ESP32-C3 + 1.28" round GC9A01 touch display** module (sold on AliExpress under the PCB reference "JCZN ESP32-2424S012"), instead of a bare ESP32 wired to a separate GC9A01 breakout. Tapping the screen sends a tare command, same as the "Tare" button in the web UI.
 
 ## Why two boards?
 
@@ -55,7 +57,24 @@ GPIO2/3 were chosen because GPIO4, 5, 8, 9, 15 are boot strapping pins on the ES
 
 ## display-esp32/ - Display
 
-GC9A01 wiring unchanged from the original repo (see `display-esp32/include/config.h`). The HX711 is no longer wired on this board.
+Runs on an **ESP32-C3** all-in-one module with a built-in 1.28" round GC9A01 display and CST816 capacitive touch, everything on one small board/PCB (no separate breakout or wiring). Pins (see `display-esp32/include/config.h`):
+
+| Function | Pin |
+|---|---|
+| TFT MOSI | GPIO7 |
+| TFT SCLK | GPIO6 |
+| TFT CS | GPIO10 |
+| TFT DC | GPIO2 |
+| TFT RST | not connected (module is reset over SPI) |
+| TFT Backlight | GPIO3 |
+| Touch SDA | GPIO4 |
+| Touch SCL | GPIO5 |
+| Touch RST | GPIO1 |
+| Touch INT | GPIO0 |
+
+The touch controller (CST816, I2C address `0x15`) is handled by `display-esp32/src/touch.cpp` using the [fbiego/CST816S](https://github.com/fbiego/CST816S) library: a single tap anywhere on the screen sends a tare command to the scale over BLE.
+
+The HX711 is no longer wired on this board (moved to `scale-esp32c6`).
 
 ## Flashing both boards
 
@@ -63,8 +82,9 @@ Each folder is a standalone PlatformIO project:
 cd scale-esp32c6
 pio run -t upload         # ESP32-C6 over USB
 cd ../display-esp32
-pio run -t upload         # regular ESP32, over USB the first time, then OTA
-`display-esp32` keeps OTA (ArduinoOTA + AsyncElegantOTA) as in the original project; `scale-esp32c6` is flashed over USB (no OTA, no Wifi on this board).
+pio run -e esp32-c3-usb -t upload   # ESP32-C3, first flash over USB
+pio run -e esp32-c3-ota -t upload   # subsequent flashes over Wifi/OTA (set upload_port in platformio.ini to the display's IP/hostname)
+`display-esp32` keeps OTA (ArduinoOTA + ElegantOTA) as in the original project; `scale-esp32c6` is flashed over USB (no OTA, no Wifi on this board).
 
 ## Limitations / TODO
 

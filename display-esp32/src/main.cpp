@@ -10,6 +10,7 @@
 #include "ble_client.h"
 #include "FS.h"
 #include "display.h"
+#include "touch.h"
 #include <string>
 #include <SPIFFS.h>
 #include <ArduinoOTA.h>
@@ -20,13 +21,21 @@ void setup(void)
 {
     initialize();
     initWebServer();
+    touch_init();
 }
 
 void loop()
 {
     ble_client_loop();
     refresh_display();
-    delayMicroseconds(2000000); //2000000
     ArduinoOTA.handle();
     ElegantOTA.loop();
+
+    // Same ~2s cadence as before for the display/BLE/OTA work above, but
+    // polled in small steps so touch taps aren't missed in between.
+    for (int i = 0; i < 20; i++)
+    {
+        touch_loop();
+        delay(100);
+    }
 }
