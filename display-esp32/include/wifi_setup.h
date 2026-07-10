@@ -9,4 +9,8 @@
 // get included in the same .cpp file.
 extern void connectWifi();
 
+// Clears saved Wifi credentials so the next boot falls back to the
+// "TapDisplay_AP" captive portal. Does not itself reboot the device.
+extern void resetWifiSettings();
+
 #endif

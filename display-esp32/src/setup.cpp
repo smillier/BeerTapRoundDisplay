@@ -106,29 +106,11 @@ void initWebServer()
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/index.html", "text/html"); });
 
-  server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/w3.css", "text/css"); });
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/style.css", "text/css"); });
 
-  server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/script.js", "text/javascript"); });
-
-  server.on("/jquery-3.4.1.min.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/jquery-3.4.1.min.js", "text/javascript"); });
-
-  server.on("/param.xml", HTTP_GET, [](AsyncWebServerRequest *request)
-            { 
-              request->send(SPIFFS, "/param.xml", "text/xml");});
-
-  server.on("/wparamxml", HTTP_POST, [](AsyncWebServerRequest *request)
-            { 
-                Serial.println("wparam");
-                File file = SPIFFS.open("/param.xml","w");
-                String message;
-                message = request->getParam("wparamxml", true)->value();
-                Serial.println(message);
-                file.print(message);
-
-              request->send(204);});
+  server.on("/app.js", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/app.js", "text/javascript"); });
 
   server.on("/weight", HTTP_GET, [](AsyncWebServerRequest *request)
             {
@@ -258,6 +240,51 @@ void initWebServer()
                 Serial.println("beer_sg");
               }
               request->send(200, "text/plain", (String)sg);
+            });
+
+  server.on("/beer_capacity", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              float capacity = getBeerCapacity();
+              if (request->hasParam("beer_capacity", true))
+              {
+                String message = request->getParam("beer_capacity", true)->value();
+                if (message.toFloat() != 0.0)
+                  capacity = message.toFloat();
+                setBeerCapacity(capacity);
+              }
+              request->send(200, "text/plain", (String)capacity);
+            });
+
+  // Single read of the whole beer profile, used by the web UI to populate
+  // its form on load instead of a POST-with-no-params per field.
+  server.on("/beer_profile", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+              StaticJsonDocument<256> doc;
+              doc["name"] = getBeerName();
+              doc["sg"] = getBeerSg();
+              doc["ibu"] = getBeerIBU();
+              doc["ebc"] = getBeerEBC();
+              doc["abv"] = getBeerABV();
+              doc["capacity"] = getBeerCapacity();
+              String json;
+              serializeJson(doc, json);
+              request->send(200, "application/json", json);
+            });
+
+  server.on("/restart", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              request->send(204);
+              delay(300);
+              ESP.restart();
+            });
+
+  // Clears saved Wifi credentials and reboots into the TapDisplay_AP portal
+  server.on("/reset_wifi", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              request->send(204);
+              resetWifiSettings();
+              delay(300);
+              ESP.restart();
             });
            // preference.end();
 }

@@ -86,6 +86,42 @@ The touch controller (CST816, I2C address `0x15`) is handled by `display-esp32/s
 
 The HX711 is no longer wired on this board (moved to `scale-esp32c6`).
 
+### Web UI ("BeeTap Control")
+
+`display-esp32/data/` (served over Wifi at the device's `http://<ip>/` or
+`http://BeerTapDisplay.local/`) is a from-scratch dark/OLED-themed control panel,
+implemented from a [Claude Design](https://claude.ai/design) mockup
+("BeeTap Control", project `e4750120-6cf9-463d-8540-04c588b6e35e`) against the
+device's real REST API - plain HTML/CSS/JS, no framework, no CDN dependency (system
+fonts only, so it works with zero internet access, same as the rest of the device).
+Replaces the previous jQuery + w3.css UI, which alone was ~330KB of the ~376KB
+`data/` folder (mostly the bundled jQuery copy) - the new UI is a fraction of that.
+
+- **Home tab**: live weight + circular level gauge (colour-coded green→red, same
+  spirit as the physical display's own ring meter), Tare button, "full keg" capacity
+  estimate (used only to compute the gauge %), and the beer profile form (name, SG,
+  IBU, EBC, ABV)
+- **Settings tab**: Wifi status + Reset Wifi, firmware/filesystem OTA upload (via
+  ElegantOTA's real `/ota/start` + `/ota/upload` API, with a progress bar), and a
+  Restart button
+- New backend endpoints added to `setup.cpp` to support it:
+  - `GET /beer_profile` - JSON `{name, sg, ibu, ebc, abv, capacity}`, single read to
+    populate the form (existing per-field `POST` endpoints are unchanged, used for
+    saving)
+  - `POST /beer_capacity` - same pattern as the existing per-field beer endpoints;
+    backed by a new `getBeerCapacity()`/`setBeerCapacity()` pair in `config.cpp`
+    (`Preferences`, default `19.0`) - the capacity estimate persists on the device
+    like every other beer field, rather than only in the browser
+  - `POST /restart` - `ESP.restart()` after a short delay so the response reaches
+    the client first
+  - `POST /reset_wifi` - clears saved Wifi credentials
+    (`WiFiManager::resetSettings()`, wrapped as `resetWifiSettings()` in
+    `wifi_setup.cpp` to keep `WiFiManager.h` out of `setup.cpp` - see the comment on
+    `connectWifi()` about the `HTTP_GET`/`HTTP_POST` enum collision with
+    ESPAsyncWebServer) then reboots into the `TapDisplay_AP` portal
+  - The old `/param.xml` + `/wparamxml` routes (a stale, unsynced static XML file)
+    were removed, superseded by `/beer_profile`
+
 ## Flashing both boards
 
 Each folder is a standalone PlatformIO project:

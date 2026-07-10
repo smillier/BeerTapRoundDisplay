@@ -34,6 +34,21 @@ void setBeerSg(float value)
     
 }
 
+float getBeerCapacity()
+{
+    preference.begin("TapDisplay",false);
+    float value = preference.getFloat("beer_cap",19.0);
+    preference.end();
+    return value;
+}
+
+void setBeerCapacity(float value)
+{
+    preference.begin("TapDisplay",false);
+    preference.putFloat("beer_cap",value);
+    preference.end();
+}
+
 float getBeerABV()
 {
     preference.begin("TapDisplay",false);

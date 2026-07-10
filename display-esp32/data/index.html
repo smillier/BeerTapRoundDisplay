@@ -1,63 +1,207 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="en">
 <head>
-    <title>TapDisplay</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8" />
-    <link rel="stylesheet" type="text/css" href="w3.css">
-    <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+  <meta charset="UTF-8">
+  <title>BeeTap Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body class="w3-animate-opacity">
-
-    <div class="w3-container w3-card w3-blue w3-padding-small w3-center">
-        <h1>Scale setup</h1>
+  <header class="header">
+    <div class="row" style="gap: 11px;">
+      <svg width="30" height="30" viewBox="0 0 30 30" style="flex-shrink: 0;">
+        <path d="M6.7 23.3 A11 11 0 1 1 23.3 23.3" fill="none" stroke="#272D37" stroke-width="3.4" stroke-linecap="round"></path>
+        <path d="M6.7 23.3 A11 11 0 0 1 5.2 9.5" fill="none" stroke="#1CC3E5" stroke-width="3.4" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(28,195,229,.38));"></path>
+        <circle cx="15" cy="15" r="3.4" fill="#1CC3E5"></circle>
+      </svg>
+      <span class="logo">Bee<span class="accent">Tap</span></span>
     </div>
-
-    <div class="w3-margin w3-center w3-card w3-padding-24 w3-border w3-round-large ">
-        <h3 class="w3-padding">System</h3>
-        <button id="sys_restart" onclick="onButton()" class="w3-button w3-green w3-xlarge w3-ripple w3-wide"
-            style="width:40%;">Restart</button>
-            <button id="sys_resetWifi" onclick="onButton()" class="w3-button w3-green w3-xlarge w3-ripple w3-wide"
-            style="width:40%;">Reset wifi settings</button>
+    <div class="row" style="gap: 10px; flex-wrap: wrap;">
+      <span class="badge"><span class="readout" id="hostname-label">BeerTapDisplay.local</span></span>
+      <span class="badge js-status-badge" data-tone="full"><span class="dot"></span><span class="label">Live</span></span>
     </div>
+  </header>
 
-    <div class="w3-row w3-center w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
-        <div class="w3-half w3-container  ">
-            <h3 class="w3-padding"> Weight </h3>
-            <p class="w3-xxlarge"><span id="weight">0</span> Kg </p>   
+  <nav class="tabs">
+    <button class="tab" id="tab-home" data-on="true">Home</button>
+    <button class="tab" id="tab-settings" data-on="false">Settings</button>
+  </nav>
+
+  <main>
+
+    <section class="tab-panel" id="panel-home">
+      <div class="hero-grid">
+        <div class="card glow">
+          <div class="gauge-wrap">
+            <svg width="196" height="196" viewBox="0 0 196 196">
+              <circle cx="98" cy="98" r="86" fill="none" stroke="var(--surface-inset)" stroke-width="14"></circle>
+              <circle id="gauge-arc" cx="98" cy="98" r="86" fill="none" stroke="var(--level-full)" stroke-width="14"
+                stroke-linecap="round" stroke-dasharray="540.35" stroke-dashoffset="540.35"
+                transform="rotate(-90 98 98)"></circle>
+            </svg>
+            <div class="gauge-value">
+              <span class="num readout" id="weight-value">--.--</span><span class="unit">kg</span>
+            </div>
+            <div class="eyebrow gauge-caption">Live scale reading</div>
+          </div>
         </div>
-    </div>
 
-    <div class="w3-container w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
-        <h3 class="w3-padding-24">Beer Settings</h3>
-        <input type="string" id="beer_name" name="beer_name"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
-        style="width:150px;"> Beer Name</input><br>
-        <input type="number" min="0.9" max="1.6"  required placeholder="[0.9000 - 1.6000] Sg" id="beer_sg" name="beer_sg"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
-        style="width:25%;"> Beer Specific Gravity (Sg)</input><br>
-        <input type="number" min="0" max="200"  required placeholder="[0 - 200] IBU"  id="beer_ibu" name="beer_ibu"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
-        style="width:25%;"> Beer IBU</input><br>
-      
-        <input type="number" min="0" max="200"  required placeholder="[0 - 200] EBC" id="beer_ebc" name="beer_ebc3"  class="w3-button w3-card w3-white  w3-xlarge w3-ripple w3-wide"
-        style="width:25%;"> Beer EBC</input><br>
-        <input type="number" min="0" max="20"  required placeholder="[0.0 - 20.0] %" id="beer_abv" name="beer_abv"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
-        style="width:25%;"> Beer Alcool (ABV)</input><br>
-        <br><br>
-        <button id="save_settings" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Save</button>
-    </div>     
-    <div class="w3-container w3-margin w3-card w3-padding-24 w3-border w3-round-large ">
-        <h3 class="w3-padding-24">Keg Settings</h3>
-        <input type="number" id="keg_number" name="keg_number"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
-        style="width:150px;"> Keg number</input><br>
-        <input type="number" min="0.9" max="10"  required placeholder="0-10 Kg" id="keg_weight" name="keg_weight"  class="w3-button w3-card w3-white w3-xlarge w3-ripple w3-wide"
-        style="width:25%;"> Keg weight (Empty)</input><br>
-        <br><br>
-        <button id="save_keg_settings" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Save</button>
-    </div>  
-    
-        <button id="Tare" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Tare</button>
-    </div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="card">
+            <h3 class="card-title">Tare</h3>
+            <div class="row" style="justify-content: space-between; gap: 16px; margin-bottom: 12px;">
+              <p style="margin: 0; color: var(--text-secondary); font-size: var(--text-sm); line-height: var(--leading-relaxed); max-width: 400px;">
+                Place the <strong style="color: var(--text-primary);">empty keg</strong> on the scale, then tare it - the round display uses this as its zero point.
+              </p>
+              <span class="badge js-status-badge" data-tone="full"><span class="dot"></span><span class="label">Live</span></span>
+            </div>
+            <div class="row" style="gap: 14px; justify-content: space-between; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="tare-btn">Tare scale</button>
+              <div style="flex: 1; min-width: 180px;">
+                <label class="field-label" for="capacity">Full keg (estimate, for gauge only)</label>
+                <div class="row" style="gap: 8px;">
+                  <input id="capacity" class="input" type="number" min="1" max="30" step="0.5" value="19" style="max-width: 100px;">
+                  <span class="readout" style="font-size: var(--text-sm); color: var(--text-muted);">kg</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note">
+            The device only reports raw scale weight - capacity isn't stored on the ESP32's own scale logic, so the ring above is an estimate based on the value you set here.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Beer settings</h3>
+        <div class="profile-grid">
+          <div style="grid-column: 1 / -1;">
+            <label class="field-label" for="beer-name">Beer name</label>
+            <input id="beer-name" class="input" type="text" placeholder="Untitled beer">
+          </div>
+          <div>
+            <label class="field-label" for="beer-sg">Specific gravity (SG)</label>
+            <input id="beer-sg" class="input readout" type="number" min="0.9" max="1.6" step="0.001" placeholder="1.000 - 1.600">
+          </div>
+          <div>
+            <label class="field-label" for="beer-abv">ABV</label>
+            <div class="row" style="gap: 8px;">
+              <input id="beer-abv" class="input readout" type="number" min="0" max="20" step="0.1" placeholder="0 - 20">
+              <span class="readout" style="font-size: var(--text-sm); color: var(--text-muted);">%</span>
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="beer-ibu">IBU</label>
+            <input id="beer-ibu" class="input readout" type="number" min="0" max="200" placeholder="0 - 200">
+          </div>
+          <div>
+            <label class="field-label" for="beer-ebc">EBC (color)</label>
+            <input id="beer-ebc" class="input readout" type="number" min="0" max="200" placeholder="0 - 200">
+          </div>
+        </div>
+        <div class="row" style="justify-content: flex-end; margin-top: 20px;">
+          <button class="btn btn-primary" id="save-profile-btn">Save</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-settings" hidden>
+      <div class="card">
+        <h3 class="card-title">Wifi</h3>
+        <div class="info-row">
+          <span class="eyebrow">Hostname</span>
+          <span class="readout" style="font-size: var(--text-sm);">BeerTapDisplay.local</span>
+        </div>
+        <div class="info-row">
+          <span class="eyebrow">Status</span>
+          <span class="badge" data-tone="full"><span class="dot"></span><span class="label">Connected</span></span>
+        </div>
+        <p style="margin: 16px 0 0; color: var(--text-secondary); font-size: var(--text-sm); line-height: var(--leading-relaxed);">
+          Credentials are set once via the <strong style="color: var(--text-primary);">TapDisplay_AP</strong> captive portal on first boot. If the saved network changes, reset Wifi below and reconnect to that portal.
+        </p>
+        <div class="row" style="justify-content: flex-end; margin-top: 16px;">
+          <button class="btn btn-danger sm" id="reset-wifi-btn">Reset Wifi</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Firmware update</h3>
+        <div class="row" style="justify-content: flex-end; margin-bottom: 12px;">
+          <span class="badge" data-tone="info"><span class="dot"></span><span class="label">Running v0.2</span></span>
+        </div>
+        <p style="margin: 0 0 16px; color: var(--text-secondary); font-size: var(--text-sm); line-height: var(--leading-relaxed);">
+          Uploads a compiled <span class="readout" style="font-size: var(--text-xs);">.bin</span> straight to the device's onboard updater. Keep the display powered until it finishes and reboots.
+        </p>
+
+        <label for="ota-file" class="file-picker">
+          <span class="tag">FILE</span>
+          <span class="name readout" id="ota-file-name" style="color: var(--text-muted);">Choose a .bin file...</span>
+          <input id="ota-file" type="file" accept=".bin">
+        </label>
+
+        <div class="progress" id="ota-progress-wrap" hidden style="margin-top: 16px;">
+          <div class="track"><div class="fill" id="ota-progress-fill" style="width: 0%;"></div></div>
+          <div class="caption"><span>Uploading firmware</span><span id="ota-progress-pct">0%</span></div>
+        </div>
+
+        <div class="row" style="justify-content: flex-end; margin-top: 16px;">
+          <button class="btn btn-primary sm" id="ota-upload-btn">Upload &amp; install</button>
+        </div>
+
+        <div style="margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border-subtle);">
+          <div class="eyebrow" style="margin-bottom: 10px;">Filesystem image (SPIFFS)</div>
+          <p style="margin: 0 0 16px; color: var(--text-secondary); font-size: var(--text-sm); line-height: var(--leading-relaxed);">
+            Separate from firmware - this is the <span class="readout" style="font-size: var(--text-xs);">data/</span> image (this web UI, beer icons). Required after any change to those files, or the display's screen stays blank.
+          </p>
+
+          <label for="spiffs-file" class="file-picker">
+            <span class="tag">FILE</span>
+            <span class="name readout" id="spiffs-file-name" style="color: var(--text-muted);">Choose a .bin image...</span>
+            <input id="spiffs-file" type="file" accept=".bin">
+          </label>
+
+          <div class="progress" id="spiffs-progress-wrap" hidden style="margin-top: 16px;">
+            <div class="track"><div class="fill info" id="spiffs-progress-fill" style="width: 0%;"></div></div>
+            <div class="caption"><span>Uploading filesystem</span><span id="spiffs-progress-pct">0%</span></div>
+          </div>
+
+          <div class="row" style="justify-content: flex-end; margin-top: 16px;">
+            <button class="btn btn-secondary sm" id="spiffs-upload-btn">Upload filesystem</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">System</h3>
+        <div class="info-row">
+          <span class="eyebrow">Board</span>
+          <span class="readout" style="font-size: var(--text-sm);">ESP32-C3 &middot; JCZN 2424S012</span>
+        </div>
+        <div class="info-row">
+          <span class="eyebrow">Firmware</span>
+          <span class="readout" style="font-size: var(--text-sm);">v0.2</span>
+        </div>
+        <div class="info-row">
+          <span class="eyebrow">Scale link</span>
+          <span class="badge js-status-badge" data-tone="full"><span class="dot"></span><span class="label">Live</span></span>
+        </div>
+
+        <div class="row" style="justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div style="font-size: var(--text-sm);">Danger zone</div>
+            <div style="font-size: var(--text-xs); color: var(--text-muted);">Restart the board to apply changes</div>
+          </div>
+          <button class="btn btn-ghost sm" id="restart-btn">Restart</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" hidden></div>
+
+  <script src="app.js"></script>
 </body>
-
 </html>

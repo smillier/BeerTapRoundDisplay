@@ -161,6 +161,9 @@ extern void setBeerName(String value);
 extern float getBeerSg();
 extern void setBeerSg(float value);
 
+extern float getBeerCapacity();
+extern void setBeerCapacity(float value);
+
 extern int getBeerIBU();
 extern void setBeerIBU(int value);
 

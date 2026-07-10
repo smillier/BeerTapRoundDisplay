@@ -19,3 +19,9 @@ void connectWifi()
     Serial.println("Wifi not connected");
   }
 }
+
+void resetWifiSettings()
+{
+  WiFiManager wifiManager;
+  wifiManager.resetSettings();
+}
