@@ -149,5 +149,4 @@ Hardware-verified on real boards (2026-07): `display-esp32` boots, connects to W
 ## Limitations / TODO
 
 - The `Case/` and `PCB/` files from the original repo (3D enclosure, Eagle PCB) were designed for the combined display+HX711 board: they'll need to be redesigned/split into two enclosures (not addressed in this version, out of software scope).
-- `data/config.json` (demo content from the original repo) contains a dummy SSID and Wifi key in plain text — check/clean this up before publishing if that wasn't intentional.
 - No BLE pairing (LE Secure Connections): fine for home use where only weight is transmitted, but worth keeping in mind if the protocol evolves.
