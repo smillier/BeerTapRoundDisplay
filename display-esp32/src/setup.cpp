@@ -21,13 +21,20 @@ AsyncWebServer server(80);
 
 void initialize()
 {
-  Serial.println("Init display");
-
   Serial.begin(115200);
   Serial.println("\n");
-  Serial.println("Connexion etablie!");
-  Serial.print("Adresse IP: ");
-  Serial.println(WiFi.localIP());
+  Serial.println("Init display");
+
+  // Must run before MDNS.begin(): mDNS needs an active network interface,
+  // which doesn't exist yet on a fresh boot until WiFi actually connects
+  // (or the WiFiManager captive portal is used to configure it).
+  connectWifi();
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print("Adresse IP: ");
+    Serial.println(WiFi.localIP());
+  }
+
   //mDNS Responder
   // Set up mDNS responder:
     // - first argument is the domain name, in this example
@@ -48,8 +55,6 @@ void initialize()
     MDNS.addService("http", "tcp", 80);
     //----------------------------------------------------OTA
   Serial.println("Starting OTA...");
-
-  connectWifi();
 
  ArduinoOTA
     .onStart([]() {
@@ -82,17 +87,16 @@ void initialize()
     ElegantOTA.begin(&server);    // Start ElegantOTA
   server.begin();
   Serial.println("Serveur actif!");
-  
+
   if(!SPIFFS.begin()){
         Serial.println("SPIFFS Mount Failed");
         return;
     }
-     
      display_init();
    Serial.println("Scale setup");
  scale_setup();
   //scale_calibrate();
- 
+
 }
 
 

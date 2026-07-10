@@ -82,9 +82,20 @@ Each folder is a standalone PlatformIO project:
 cd scale-esp32c6
 pio run -t upload         # ESP32-C6 over USB
 cd ../display-esp32
-pio run -e esp32-c3-usb -t upload   # ESP32-C3, first flash over USB
-pio run -e esp32-c3-ota -t upload   # subsequent flashes over Wifi/OTA (set upload_port in platformio.ini to the display's IP/hostname)
+pio run -e esp32-c3-usb -t upload     # ESP32-C3 firmware, first flash over USB
+pio run -e esp32-c3-usb -t uploadfs   # ESP32-C3 filesystem image (data/ folder - web UI, beer BMPs)
+pio run -e esp32-c3-ota -t upload     # subsequent firmware flashes over Wifi/OTA (set upload_port in platformio.ini to the display's IP/hostname)
 `display-esp32` keeps OTA (ArduinoOTA + ElegantOTA) as in the original project; `scale-esp32c6` is flashed over USB (no OTA, no Wifi on this board).
+
+**The filesystem image (`uploadfs`) is required, not optional** - without it SPIFFS fails to mount, `initialize()` returns before ever calling `display_init()`, and the screen stays blank.
+
+### JCZN ESP32-2424S012 (and clones): manual reset needed
+
+This specific board has no auto-reset circuit wired to the USB-Serial/JTAG controller, so both directions need a manual button press:
+- **Entering bootloader mode** (before every `upload`/`uploadfs`): hold **BOOT**, tap **RESET** while still holding BOOT, then release BOOT.
+- **Returning to normal run mode** (after every flash): a plain RESET tap is not reliable either - fully **unplug/replug the USB cable** to guarantee a clean boot into the app.
+
+Hardware-verified on this exact board (2026-07): boots, connects to Wifi (falls back to the `TapDisplay_AP` WiFiManager captive portal if no credentials are saved), shows the beer dial, and tap-to-tare over touch all work end to end.
 
 ## Limitations / TODO
 
