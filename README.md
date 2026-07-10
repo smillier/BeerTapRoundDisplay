@@ -1,6 +1,6 @@
 # BeerTapRoundDisplay V2 - Remote Scale (ESP32-C6 + BLE)
 
-##Attention: Fully functionnal but a tap on the display screen while tare the keg weight. This should be changed to double tap or ask for confimation.
+## Attention: Fully functionnal but a tap on the display screen while tare the keg weight. This should be changed to double tap or ask for confimation.
 
 ![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/render1.png)
 
