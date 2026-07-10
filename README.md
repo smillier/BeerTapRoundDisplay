@@ -55,6 +55,14 @@ Behavior:
 
 GPIO2/3 were chosen because GPIO4, 5, 8, 9, 15 are boot strapping pins on the ESP32-C6 and must be avoided. Adjust `SCALE_CALIBRATION_FACTOR` in `scale-esp32c6/include/config.h` for your own load cell (same calibration procedure as the original: weigh a known weight and adjust the factor).
 
+`scale_setup()`/`scale_tare()`/`getWeight()` use `HX711::wait_ready_timeout()` (1s) instead of the library's plain `tare()`/`get_units()`, which otherwise block forever if the HX711 never pulls DOUT low (not wired yet, loose connection...). Without this guard, a disconnected load cell hangs `setup()` before BLE ever starts advertising - with it, the scale still comes up and reports `0.0`.
+
+### Building scale-esp32c6 on Windows
+
+This project uses the [pioarduino](https://github.com/pioarduino/platform-espressif32) platform fork (the official PlatformIO `espressif32` registry entry dropped Arduino framework support for ESP32-C6). Two Windows-specific gotchas:
+- **Build from a native shell (cmd/PowerShell), not Git Bash/MSYS** - pioarduino's `idf_tools.py`/esptool install step explicitly refuses to run under MSYS ("MSys/Mingw is not supported").
+- **Set the console to UTF-8 first** (`chcp 65001` in `cmd`/PowerShell, plus `$env:PYTHONIOENCODING="utf-8"`) - esptool's progress bar otherwise crashes PlatformIO's output relay under the default `cp1252` codepage.
+
 ## display-esp32/ - Display
 
 Runs on an **ESP32-C3** all-in-one module with a built-in 1.28" round GC9A01 display and CST816 capacitive touch, everything on one small board/PCB (no separate breakout or wiring). Pins (see `display-esp32/include/config.h`):
@@ -89,13 +97,14 @@ pio run -e esp32-c3-ota -t upload     # subsequent firmware flashes over Wifi/OT
 
 **The filesystem image (`uploadfs`) is required, not optional** - without it SPIFFS fails to mount, `initialize()` returns before ever calling `display_init()`, and the screen stays blank.
 
-### JCZN ESP32-2424S012 (and clones): manual reset needed
+### Native-USB boards (JCZN ESP32-2424S012, ESP32-C6-DevKitM-1, clones): manual reset needed
 
-This specific board has no auto-reset circuit wired to the USB-Serial/JTAG controller, so both directions need a manual button press:
+Both boards talk USB through the chip's built-in USB-Serial/JTAG controller (no external CP210x/CH340 bridge), which has no reliable auto-reset circuit:
 - **Entering bootloader mode** (before every `upload`/`uploadfs`): hold **BOOT**, tap **RESET** while still holding BOOT, then release BOOT.
 - **Returning to normal run mode** (after every flash): a plain RESET tap is not reliable either - fully **unplug/replug the USB cable** to guarantee a clean boot into the app.
+- **Opening a serial monitor can itself reset the board back into bootloader** (default DTR/RTS assertion on connect is misread as a reset request). If the monitor shows nothing at all right after a flash, reopen it with `pio device monitor -p COMx -b 115200 --rts 0 --dtr 0` before assuming the firmware is broken.
 
-Hardware-verified on this exact board (2026-07): boots, connects to Wifi (falls back to the `TapDisplay_AP` WiFiManager captive portal if no credentials are saved), shows the beer dial, and tap-to-tare over touch all work end to end.
+Hardware-verified on real boards (2026-07): `display-esp32` boots, connects to Wifi (falls back to the `TapDisplay_AP` WiFiManager captive portal if no credentials are saved), shows the beer dial, and tap-to-tare over touch. `scale-esp32c6` advertises over BLE, the display connects (status dot green), and the tare command round-trips correctly (`Tare requested by display` logged on the scale on each tap) - tested without load cells physically wired.
 
 ## Limitations / TODO
 
