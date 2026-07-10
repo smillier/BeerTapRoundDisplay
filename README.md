@@ -1,7 +1,5 @@
 # BeerTapRoundDisplay V2 - Remote Scale (ESP32-C6 + BLE)
 
-## Attention: Fully functionnal but a tap on the display screen will tare the keg weight. This should be changed to double tap or ask for confimation.
-
 ![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/render1.png)
 
 Fork of [BeerTapRoundDisplay](https://github.com/smillier/BeerTapRoundDisplay) that separates the scale (HX711 + weight sensors) from the round GC9A01 display. The two boards communicate over Bluetooth Low Energy instead of being wired together on a single ESP32.
@@ -12,7 +10,7 @@ Fork of [BeerTapRoundDisplay](https://github.com/smillier/BeerTapRoundDisplay) t
 │                          │   tare command             │   computes volume        │
 └─────────────────────────┘                            └──────────────────────────┘
 
-`display-esp32` now targets an all-in-one **ESP32-C3 + 1.28" round GC9A01 touch display** module (sold on AliExpress under the PCB reference "JCZN ESP32-2424S012"), instead of a bare ESP32 wired to a separate GC9A01 breakout. Tapping the screen sends a tare command, same as the "Tare" button in the web UI.
+`display-esp32` now targets an all-in-one **ESP32-C3 + 1.28" round GC9A01 touch display** module (sold on AliExpress under the PCB reference "JCZN ESP32-2424S012"), instead of a bare ESP32 wired to a separate GC9A01 breakout. Long-pressing the screen sends a tare command, same as the "Tare" button in the web UI.
 
 ## Why two boards?
 
@@ -82,7 +80,7 @@ Runs on an **ESP32-C3** all-in-one module with a built-in 1.28" round GC9A01 dis
 | Touch RST | GPIO1 |
 | Touch INT | GPIO0 |
 
-The touch controller (CST816, I2C address `0x15`) is handled by `display-esp32/src/touch.cpp` using the [fbiego/CST816S](https://github.com/fbiego/CST816S) library: a single tap anywhere on the screen sends a tare command to the scale over BLE.
+The touch controller (CST816, I2C address `0x15`) is handled by `display-esp32/src/touch.cpp` using the [fbiego/CST816S](https://github.com/fbiego/CST816S) library: a **long-press** anywhere on the screen sends a tare command to the scale over BLE (a plain tap is deliberately ignored, so brushing the screen doesn't accidentally zero it).
 
 The HX711 is no longer wired on this board (moved to `scale-esp32c6`).
 
@@ -96,6 +94,10 @@ device's real REST API - plain HTML/CSS/JS, no framework, no CDN dependency (sys
 fonts only, so it works with zero internet access, same as the rest of the device).
 Replaces the previous jQuery + w3.css UI, which alone was ~330KB of the ~376KB
 `data/` folder (mostly the bundled jQuery copy) - the new UI is a fraction of that.
+
+| Home | Settings |
+|---|---|
+| ![Home tab](doc/webui-home.png) | ![Settings tab](doc/webui-settings.png) |
 
 - **Home tab**: live weight + circular level gauge (colour-coded green→red, same
   spirit as the physical display's own ring meter), Tare button, "full keg" capacity
@@ -142,7 +144,7 @@ Both boards talk USB through the chip's built-in USB-Serial/JTAG controller (no 
 - **Returning to normal run mode** (after every flash): a plain RESET tap is not reliable either - fully **unplug/replug the USB cable** to guarantee a clean boot into the app.
 - **Opening a serial monitor can itself reset the board back into bootloader** (default DTR/RTS assertion on connect is misread as a reset request). If the monitor shows nothing at all right after a flash, reopen it with `pio device monitor -p COMx -b 115200 --rts 0 --dtr 0` before assuming the firmware is broken.
 
-Hardware-verified on real boards (2026-07): `display-esp32` boots, connects to Wifi (falls back to the `TapDisplay_AP` WiFiManager captive portal if no credentials are saved), shows the beer dial, and tap-to-tare over touch. `scale-esp32c6` advertises over BLE, the display connects (status dot green), and the tare command round-trips correctly (`Tare requested by display` logged on the scale on each tap) - tested without load cells physically wired.
+Hardware-verified on real boards (2026-07): `display-esp32` boots, connects to Wifi (falls back to the `TapDisplay_AP` WiFiManager captive portal if no credentials are saved), shows the beer dial, and long-press-to-tare over touch. `scale-esp32c6` advertises over BLE, the display connects (status dot green), and the tare command round-trips correctly (`Tare requested by display` logged on the scale on each long-press) - tested without load cells physically wired.
 
 ## Limitations / TODO
 

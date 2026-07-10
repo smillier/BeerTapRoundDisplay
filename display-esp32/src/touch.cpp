@@ -21,7 +21,9 @@ void touch_loop()
   if (!touch.available())
     return;
 
-  if (touch.data.gestureID != SINGLE_CLICK)
+  // A long-press is required (not a plain tap) so tare isn't triggered by
+  // accidentally brushing the screen - see the README's attention note.
+  if (touch.data.gestureID != LONG_PRESS)
     return;
 
   unsigned long now = millis();
@@ -29,6 +31,6 @@ void touch_loop()
     return;
   lastTapMillis = now;
 
-  Serial.println("Touch tap: tare");
+  Serial.println("Touch long-press: tare");
   scale_calibrate();
 }

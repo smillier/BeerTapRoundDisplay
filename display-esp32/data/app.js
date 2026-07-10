@@ -77,7 +77,9 @@ async function loadBeerProfile() {
     document.getElementById('capacity').value = profile.capacity ?? 19;
     lastCapacityKg = Number(profile.capacity) || 19;
   } catch (e) {
-    showToast('Could not load beer profile');
+    // Not user-initiated (runs once on page load) - fail quietly, the
+    // status badge/gauge already reflect connectivity via pollScale().
+    console.warn('Could not load beer profile', e);
   }
 }
 
@@ -207,6 +209,8 @@ function init() {
 
   setupUploadCard('ota', 'firmware', 'Firmware installed - rebooting BeeTap display');
   setupUploadCard('spiffs', 'fs', 'Filesystem image installed - reloading web UI');
+
+  setTab(location.hash === '#settings' ? 'settings' : 'home');
 
   loadBeerProfile();
   pollScale();
