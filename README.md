@@ -124,6 +124,34 @@ Replaces the previous jQuery + w3.css UI, which alone was ~330KB of the ~376KB
   - The old `/param.xml` + `/wparamxml` routes (a stale, unsynced static XML file)
     were removed, superseded by `/beer_profile`
 
+### Security
+
+A penetration test of `display-esp32` (full engagement report available separately)
+found that every endpoint - including the web UI, the beer-profile API, `/tare`,
+`/restart`, `/reset_wifi`, and most seriously the OTA firmware-upload path
+(`/update`, `/ota/start`, `/ota/upload`) - had **no authentication of any kind**,
+meaning anyone on the same network could silently reconfigure the device, reboot
+it, wipe its Wifi settings, or push arbitrary firmware. This is now fixed:
+
+- Every custom endpoint in `setup.cpp` and both OTA channels (ElegantOTA's web
+  upload *and* the separate `ArduinoOTA` WiFi-upload protocol on port 8266) are
+  gated behind a single shared username/password (HTTP Basic auth - `checkAuth()`
+  in `setup.cpp`, username fixed as `admin`).
+- The password is **not** a hardcoded default shipped in every device running
+  this firmware - `getApiPassword()` (`config.cpp`) generates a random 12-character
+  password per device on first boot (ESP32 hardware RNG, ambiguous characters like
+  `I`/`l`/`1`/`O`/`0` excluded since it's read off a Serial console), persists it
+  via `Preferences`, and `initialize()` prints it to Serial **on every boot** so
+  it can always be retrieved with just a USB cable.
+- `POST /api_password` (requires the *current* password) lets the owner set a
+  memorable password from the web UI afterwards instead of living with the
+  random one forever.
+- First login after flashing this version: open a Serial monitor at 115200 baud,
+  power-cycle the device, and look for the `Web UI / OTA login` block printed
+  right after boot. The browser's native HTTP Basic Auth prompt will then accept
+  that username/password for the web UI, and the same credentials work for
+  ElegantOTA's `/update` page and for `pio run -t upload` over WiFi (`ArduinoOTA`).
+
 ## Flashing both boards
 
 Each folder is a standalone PlatformIO project:

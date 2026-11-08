@@ -164,6 +164,15 @@ extern void setBeerSg(float value);
 extern float getBeerCapacity();
 extern void setBeerCapacity(float value);
 
+// Shared credential gating every custom endpoint (setup.cpp) and ElegantOTA.
+// Username is fixed; the password is generated per-device on first boot
+// (see getApiPassword()) rather than a single hardcoded default shipped in
+// every device running this firmware - so one leaked default doesn't expose
+// every BeeTap display. Printed to Serial on every boot for retrieval.
+#define API_USERNAME "admin"
+extern String getApiPassword();
+extern void setApiPassword(String value);
+
 extern int getBeerIBU();
 extern void setBeerIBU(int value);
 

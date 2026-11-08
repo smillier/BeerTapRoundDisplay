@@ -1,4 +1,5 @@
 #include <config.h>
+#include <esp_system.h>
 
 Preferences preference;
 
@@ -92,6 +93,36 @@ void setBeerEBC(int value)
     preference.begin("TapDisplay",false);
     preference.putInt("beer_EBC",value);
     preference.end();    
+}
+
+String getApiPassword()
+{
+    preference.begin("TapDisplay",false);
+    String value = preference.getString("api_pass","");
+    if (value.length() == 0)
+    {
+        // Never configured (first boot after flashing this version): generate
+        // a random per-device password using the ESP32's hardware RNG rather
+        // than shipping one fixed default across every device running this
+        // firmware. Excludes visually-ambiguous characters (I/l/1, O/0) since
+        // this gets read off a Serial console and typed by hand.
+        const char charset[] = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+        char buf[13];
+        for (int i = 0; i < 12; i++)
+            buf[i] = charset[esp_random() % (sizeof(charset) - 1)];
+        buf[12] = '\0';
+        value = String(buf);
+        preference.putString("api_pass",value);
+    }
+    preference.end();
+    return value;
+}
+
+void setApiPassword(String value)
+{
+    preference.begin("TapDisplay",false);
+    preference.putString("api_pass",value);
+    preference.end();
 }
 
 String getFileForEBC()

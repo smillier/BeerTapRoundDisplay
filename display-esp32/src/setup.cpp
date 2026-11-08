@@ -19,11 +19,30 @@ AsyncWebServer server(80);
 
 //Preferences preference;
 
+// Gate every custom endpoint below behind the shared API credential (see
+// config.h). Call as the first line of every server.on() handler.
+static bool checkAuth(AsyncWebServerRequest *request)
+{
+  if (!request->authenticate(API_USERNAME, getApiPassword().c_str()))
+  {
+    request->requestAuthentication();
+    return false;
+  }
+  return true;
+}
+
 void initialize()
 {
   Serial.begin(115200);
   Serial.println("\n");
   Serial.println("Init display");
+
+  String apiPassword = getApiPassword();
+  Serial.println("-----------------------------------------------------");
+  Serial.println("Web UI / OTA login - username: " API_USERNAME);
+  Serial.println("Web UI / OTA login - password: " + apiPassword);
+  Serial.println("(change the password from Settings once logged in)");
+  Serial.println("-----------------------------------------------------");
 
   // Must run before MDNS.begin(): mDNS needs an active network interface,
   // which doesn't exist yet on a fresh boot until WiFi actually connects
@@ -81,10 +100,14 @@ void initialize()
       else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
       else if (error == OTA_END_ERROR) Serial.println("End Failed");
     });
-    
+
+    // Same credential as the web UI/ElegantOTA - this is a separate OTA
+    // channel (the pio/Arduino-IDE "upload over WiFi" protocol, port 8266)
+    // that was otherwise just as unauthenticated as the web-based one.
+    ArduinoOTA.setPassword(apiPassword.c_str());
     ArduinoOTA.begin();
 
-    ElegantOTA.begin(&server);    // Start ElegantOTA
+    ElegantOTA.begin(&server, API_USERNAME, apiPassword.c_str());    // Start ElegantOTA
   server.begin();
   Serial.println("Serveur actif!");
 
@@ -104,16 +127,20 @@ void initWebServer()
 {
    //----------------------------------------------------SERVER
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/index.html", "text/html"); });
+            { if (!checkAuth(request)) return;
+              request->send(SPIFFS, "/index.html", "text/html"); });
 
   server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/style.css", "text/css"); });
+            { if (!checkAuth(request)) return;
+              request->send(SPIFFS, "/style.css", "text/css"); });
 
   server.on("/app.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/app.js", "text/javascript"); });
+            { if (!checkAuth(request)) return;
+              request->send(SPIFFS, "/app.js", "text/javascript"); });
 
   server.on("/weight", HTTP_GET, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               float sensorValue = getWeight();
               //int val = analogRead(capteurPression);
               String Value = String(sensorValue);
@@ -124,6 +151,7 @@ void initWebServer()
   // Tare command relayed over BLE to the remote scale (ESP32-C6 + HX711)
   server.on("/tare", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               scale_calibrate();
               request->send(204);
             });
@@ -131,6 +159,7 @@ void initWebServer()
   // Reports whether the display is currently linked to the remote scale over BLE
   server.on("/scale_status", HTTP_GET, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               String json = "{\"connected\":";
               json += isScaleConnected() ? "true" : "false";
               json += ",\"stale\":";
@@ -140,6 +169,7 @@ void initWebServer()
             });
   server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               //etatLedVoulu = 1;
               request->send(204);
              // Serial.println("On");
@@ -147,6 +177,7 @@ void initWebServer()
 
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               //etatLedVoulu = 0;
               //digitalWrite(led, LOW);
               //etatLed = 0;
@@ -156,6 +187,7 @@ void initWebServer()
 
   server.on("/delayLed", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               if (request->hasParam("valeurDelayLed", true))
               {
                 String message;
@@ -168,6 +200,7 @@ void initWebServer()
             });
   server.on("/beer_name", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               if (request->hasParam("beer_name", true))
               {
                 String message;
@@ -182,6 +215,7 @@ void initWebServer()
 
     server.on("/beer_ibu", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               if (request->hasParam("beer_ibu", true))
               {
                 String message;
@@ -198,6 +232,7 @@ void initWebServer()
             });
    server.on("/beer_ebc", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               int EBC = getBeerEBC();
               if (request->hasParam("beer_ebc", true))
               {
@@ -215,6 +250,7 @@ void initWebServer()
             });
    server.on("/beer_abv", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               float ABV = getBeerABV();
               if (request->hasParam("beer_abv", true))
               {
@@ -229,6 +265,7 @@ void initWebServer()
             });
     server.on("/beer_sg", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               float sg = getBeerSg();
               if (request->hasParam("beer_sg", true))
               {
@@ -244,6 +281,7 @@ void initWebServer()
 
   server.on("/beer_capacity", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               float capacity = getBeerCapacity();
               if (request->hasParam("beer_capacity", true))
               {
@@ -259,6 +297,7 @@ void initWebServer()
   // its form on load instead of a POST-with-no-params per field.
   server.on("/beer_profile", HTTP_GET, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               StaticJsonDocument<256> doc;
               doc["name"] = getBeerName();
               doc["sg"] = getBeerSg();
@@ -273,6 +312,7 @@ void initWebServer()
 
   server.on("/restart", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               request->send(204);
               delay(300);
               ESP.restart();
@@ -281,10 +321,32 @@ void initWebServer()
   // Clears saved Wifi credentials and reboots into the TapDisplay_AP portal
   server.on("/reset_wifi", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+              if (!checkAuth(request)) return;
               request->send(204);
               resetWifiSettings();
               delay(300);
               ESP.restart();
+            });
+
+  // Lets the owner set a memorable password (via Settings) in place of the
+  // random one generated and printed to Serial on first boot. Requires the
+  // *current* password to change it.
+  server.on("/api_password", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if (!checkAuth(request)) return;
+              if (request->hasParam("api_password", true))
+              {
+                String newPassword = request->getParam("api_password", true)->value();
+                if (newPassword.length() >= 8)
+                {
+                  setApiPassword(newPassword);
+                  request->send(204);
+                  return;
+                }
+                request->send(400, "text/plain", "Password must be at least 8 characters");
+                return;
+              }
+              request->send(400, "text/plain", "Missing api_password");
             });
            // preference.end();
 }
