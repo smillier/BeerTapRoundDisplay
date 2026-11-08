@@ -1,0 +1,53 @@
+<svg viewBox="0 0 720 280" width="720" height="280" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="archTitle archDesc">
+  <title id="archTitle">BeerTapRoundDisplay architecture</title>
+  <desc id="archDesc">Two ESP32 boards communicate over Bluetooth Low Energy. scale-esp32c6 (ESP32-C6 plus HX711, mounted under the keg) notifies the weight in grams to display-esp32 (ESP32-C3 plus round touch display, with WiFi, web server and OTA), which sends tare commands back. The display computes volume and serves the web UI.</desc>
+  <style>
+    .bg { fill: #ffffff; }
+    .box { fill: #f6f8fa; stroke: #30363d; stroke-width: 2; }
+    .boxTitle { font: 700 18px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0d1117; }
+    .sub { font: 13px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #30363d; }
+    .role { font: 600 12px ui-monospace, "SFMono-Regular", Consolas, monospace; fill: #57606a; }
+    .caption { font: 700 13px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0969da; }
+    .heading { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #57606a; }
+    .arrow { stroke: #0969da; stroke-width: 2.5; fill: none; }
+    .arrowhead { fill: #0969da; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0d1117; }
+      .box { fill: #161b22; stroke: #3d444d; }
+      .boxTitle { fill: #e6edf3; }
+      .sub { fill: #c9d1d9; }
+      .role { fill: #8b949e; }
+      .heading { fill: #8b949e; }
+    }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="720" height="280"/>
+  <text class="heading" x="360" y="30" text-anchor="middle">BLE (GATT)</text>
+
+  <!-- scale-esp32c6 -->
+  <rect class="box" x="20" y="80" width="280" height="150" rx="14"/>
+  <text class="boxTitle" x="160" y="112" text-anchor="middle">scale-esp32c6</text>
+  <text class="sub" x="160" y="136" text-anchor="middle">ESP32-C6 + HX711</text>
+  <text class="sub" x="160" y="156" text-anchor="middle">under the keg</text>
+  <text class="role" x="160" y="200" text-anchor="middle">BLE peripheral (server)</text>
+
+  <!-- display-esp32 -->
+  <rect class="box" x="420" y="80" width="280" height="150" rx="14"/>
+  <text class="boxTitle" x="560" y="112" text-anchor="middle">display-esp32</text>
+  <text class="sub" x="560" y="136" text-anchor="middle">ESP32-C3 + round touch display</text>
+  <text class="sub" x="560" y="156" text-anchor="middle">WiFi + web server + OTA</text>
+  <text class="role" x="560" y="200" text-anchor="middle">BLE central (client)</text>
+
+  <!-- weight notify: scale -> display -->
+  <path class="arrow" d="M300,128 H408"/>
+  <path class="arrowhead" d="M408,128 L396,121 V135 Z"/>
+  <text class="caption" x="354" y="118" text-anchor="middle">notify weight (g)</text>
+
+  <!-- tare command: display -> scale -->
+  <path class="arrow" d="M408,182 H300"/>
+  <path class="arrowhead" d="M300,182 L312,175 V189 Z"/>
+  <text class="caption" x="354" y="205" text-anchor="middle">tare command</text>
+
+  <text class="sub" x="160" y="250" text-anchor="middle">weighs the keg, no WiFi needed</text>
+  <text class="sub" x="560" y="250" text-anchor="middle">computes volume, shows the round dial</text>
+</svg>

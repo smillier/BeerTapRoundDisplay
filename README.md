@@ -3,14 +3,12 @@
 ![](https://github.com/smillier/BeerTapRoundDisplay/blob/master/doc/render1.png)
 
 Fork of [BeerTapRoundDisplay](https://github.com/smillier/BeerTapRoundDisplay) that separates the scale (HX711 + weight sensors) from the round GC9A01 display. The two boards communicate over Bluetooth Low Energy instead of being wired together on a single ESP32.
-─────────────────────────┐        BLE (GATT)        ┌──────────────────────────┐
-│   scale-esp32c6          │  ────────────────────►   │   display-esp32          │
-│   ESP32-C6 + HX711       │   notify weight (g)       │   ESP32-C3 + round touch │
-│   under the keg           │  ◄────────────────────   │   Wifi + WebServer + OTA │
-│                          │   tare command             │   computes volume        │
-└─────────────────────────┘                            └──────────────────────────┘
 
-`display-esp32` now targets an all-in-one **ESP32-C3 + 1.28" round GC9A01 touch display** module (sold on AliExpress under the PCB reference "JCZN ESP32-2424S012"), instead of a bare ESP32 wired to a separate GC9A01 breakout. Long-pressing the screen sends a tare command, same as the "Tare" button in the web UI.
+![Two ESP32 boards - scale-esp32c6 and display-esp32 - talking over BLE](doc/architecture.svg)
+
+`display-esp32` targets an all-in-one **ESP32-C3 + 1.28" round GC9A01 touch display** module (sold on AliExpress under the PCB reference "JCZN ESP32-2424S012"), instead of a bare ESP32 wired to a separate GC9A01 breakout. Long-pressing the screen sends a tare command, same as the "Tare" button in the web UI.
+
+**Jump to:** [Why two boards](#why-two-boards) · [Repo structure](#repo-structure) · [BLE protocol](#ble-protocol) · [scale-esp32c6](#scale-esp32c6-hx711-wiring) · [display-esp32](#display-esp32-display) · [Web UI](#web-ui-beetap-control) · [Security](#security) · [Flashing both boards](#flashing-both-boards) · [Limitations](#limitations--todo)
 
 ## Why two boards?
 
@@ -19,8 +17,12 @@ Fork of [BeerTapRoundDisplay](https://github.com/smillier/BeerTapRoundDisplay) t
 - The display keeps the existing Wifi/OTA/web server (beer config, IBU, ABV, SG...) and shows a status dot (green/orange/red) indicating how fresh the BLE link is.
 
 ## Repo structure
+
+```
 scale-esp32c6/     Scale firmware (HX711 -> BLE GATT server)
 display-esp32/     Display firmware (BLE GATT client -> display + Wifi/webserver)
+```
+
 These are two independent PlatformIO projects, flashed separately (two `platformio.ini` files).
 
 ## BLE Protocol
@@ -44,7 +46,7 @@ Behavior:
 - `GET /scale_status` returns `{"connected":bool,"stale":bool}` for external monitoring.
 - On the display, a dot at the top of the dial shows status: green = fresh data, orange = connected but stale data (> `BLE_WEIGHT_STALE_MS` = 15s), red = scale not connected.
 
-## scale-esp32c6/ - HX711 wiring
+## scale-esp32c6: HX711 wiring
 
 | HX711 | ESP32-C6 |
 |---|---|
@@ -63,7 +65,7 @@ This project uses the [pioarduino](https://github.com/pioarduino/platform-espres
 - **Build from a native shell (cmd/PowerShell), not Git Bash/MSYS** - pioarduino's `idf_tools.py`/esptool install step explicitly refuses to run under MSYS ("MSys/Mingw is not supported").
 - **Set the console to UTF-8 first** (`chcp 65001` in `cmd`/PowerShell, plus `$env:PYTHONIOENCODING="utf-8"`) - esptool's progress bar otherwise crashes PlatformIO's output relay under the default `cp1252` codepage.
 
-## display-esp32/ - Display
+## display-esp32: Display
 
 Runs on an **ESP32-C3** all-in-one module with a built-in 1.28" round GC9A01 display and CST816 capacitive touch, everything on one small board/PCB (no separate breakout or wiring). Pins (see `display-esp32/include/config.h`):
 
@@ -155,12 +157,18 @@ it, wipe its Wifi settings, or push arbitrary firmware. This is now fixed:
 ## Flashing both boards
 
 Each folder is a standalone PlatformIO project:
+
+```bash
 cd scale-esp32c6
-pio run -t upload         # ESP32-C6 over USB
+pio run -t upload                     # ESP32-C6 over USB
+
 cd ../display-esp32
 pio run -e esp32-c3-usb -t upload     # ESP32-C3 firmware, first flash over USB
 pio run -e esp32-c3-usb -t uploadfs   # ESP32-C3 filesystem image (data/ folder - web UI, beer BMPs)
-pio run -e esp32-c3-ota -t upload     # subsequent firmware flashes over Wifi/OTA (set upload_port in platformio.ini to the display's IP/hostname)
+pio run -e esp32-c3-ota -t upload     # subsequent firmware flashes over Wifi/OTA
+                                       # (set upload_port in platformio.ini to the display's IP/hostname)
+```
+
 `display-esp32` keeps OTA (ArduinoOTA + ElegantOTA) as in the original project; `scale-esp32c6` is flashed over USB (no OTA, no Wifi on this board).
 
 **The filesystem image (`uploadfs`) is required, not optional** - without it SPIFFS fails to mount, `initialize()` returns before ever calling `display_init()`, and the screen stays blank.
