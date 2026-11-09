@@ -86,12 +86,12 @@ The touch controller (CST816, I2C address `0x15`) is handled by `display-esp32/s
 
 The HX711 is no longer wired on this board (moved to `scale-esp32c6`).
 
-### Web UI ("BeeTap Control")
+### Web UI ("BeerTap Control")
 
 `display-esp32/data/` (served over Wifi at the device's `http://<ip>/` or
 `http://BeerTapDisplay.local/`) is a from-scratch dark/OLED-themed control panel,
 implemented from a [Claude Design](https://claude.ai/design) mockup
-("BeeTap Control", project `e4750120-6cf9-463d-8540-04c588b6e35e`) against the
+("BeerTap Control", project `e4750120-6cf9-463d-8540-04c588b6e35e`) against the
 device's real REST API - plain HTML/CSS/JS, no framework, no CDN dependency (system
 fonts only, so it works with zero internet access, same as the rest of the device).
 Replaces the previous jQuery + w3.css UI, which alone was ~330KB of the ~376KB
@@ -128,8 +128,7 @@ Replaces the previous jQuery + w3.css UI, which alone was ~330KB of the ~376KB
 
 ### Security
 
-A penetration test of `display-esp32` (full engagement report available separately)
-found that every endpoint - including the web UI, the beer-profile API, `/tare`,
+A penetration test of `display-esp32` found that every endpoint - including the web UI, the beer-profile API, `/tare`,
 `/restart`, `/reset_wifi`, and most seriously the OTA firmware-upload path
 (`/update`, `/ota/start`, `/ota/upload`) - had **no authentication of any kind**,
 meaning anyone on the same network could silently reconfigure the device, reboot
